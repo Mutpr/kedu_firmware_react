@@ -19,6 +19,8 @@ export const List = ({ category = {} }) => {
     const serverUrl = process.env.REACT_APP_SERVER_URL;
     const session = sessionStorage.getItem("usersName");
 
+    console.log(category);
+
     useEffect(() => {
         axios.get(`${serverUrl}/board`)
             .then(resp => {
