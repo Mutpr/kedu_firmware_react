@@ -15,6 +15,7 @@ import axios from 'axios';
 import Mypage from './components/Mypage/Mypage';
 
 axios.defaults.withCredentials = true
+import Approval from './components/Apporoval/ApprovalMain';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -29,6 +30,7 @@ root.render(
         <Route path="/admin/deleteuser" element={<DeleteUser />} /> 
         <Route path="/users/login" element={<Login />} /> 
         <Route path="/mypage" element={<Mypage />} />
+        <Route path="/approval" element={<Approval/>} />
       </Routes>
     </BrowserRouter>
 )

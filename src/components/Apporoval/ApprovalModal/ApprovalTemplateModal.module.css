@@ -1,0 +1,30 @@
+/* SecondModal.module.css */
+.listContainer {
+    margin-bottom: 15px;
+}
+
+.listGroup{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.verticalList {
+    display: block;
+    max-height: 300px; /* Optional: Set max height for scroll */
+    overflow-y: auto;
+}
+
+.horizontalList {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto; /* Allows horizontal scrolling */
+    padding: 0;
+}
+
+.listItem {
+    margin-right: 10px;
+    display: inline-block;
+    white-space: nowrap; /* Prevents text wrapping */
+}

@@ -1,0 +1,17 @@
+.grid_container {
+  font-family: 'Pretendard-Regular';
+    display: grid;
+    grid-template-rows: 0.2fr 1fr;
+    grid-gap: 10px;
+    width: 100%;
+    padding: 20px;
+    height: 90%;
+    overflow-x: scroll;
+  }
+
+  @font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
