@@ -54,7 +54,7 @@
   background-color: #f9f9f9;
 }
 
-.li .p {
+.li p {
   margin: 0;
 }
 
@@ -85,6 +85,7 @@
   background-color: #c82333;
 }
 
+/* 추가된 부분 */
 .li .approveButton {
   background-color: #007bff;
   color: white;

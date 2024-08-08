@@ -7,7 +7,7 @@ const AddressModal = ({ onClose, onComplete }) => {
     <div className={styles.modal}>
       <div className={styles.modalContent}>
         <DaumPostcode onComplete={onComplete} />
-        <button onClick={onClose}>Close</button>
+        <button className={styles.button} onClick={onClose}>Close</button>
       </div>
     </div>
   );

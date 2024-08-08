@@ -1,54 +1,89 @@
 .deleteUserContainer {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
   background-color: #85d2ff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .title {
   font-size: 48px;
   font-weight: bold;
-  color: white; 
-  margin-bottom: 20px; 
+  color: #ffffff;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .deleteUserForm {
   background: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 350px;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  width: 400px;
 }
 
 .inputContainer {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 select {
   display: block;
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 10px;
   box-sizing: border-box;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+select:focus {
+  border-color: #1e90ff;
+  outline: none;
 }
 
 .deleteButton {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   background-color: #f44336;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   color: #fff;
+  font-size: 18px;
   cursor: pointer;
-  margin-top: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.deleteButton:hover {
+  background-color: #d32f2f;
+  transform: translateY(-2px);
 }
 
 .deleteButton:disabled {
   background-color: #ff7961;
   cursor: not-allowed;
+}
+
+.userInfo {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+}
+
+.userInfo h3 {
+  margin-top: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.userInfo p {
+  margin: 5px 0;
+  color: #555;
 }

@@ -9,9 +9,6 @@ import profileImagePlaceholder from '../../assets/image.png';
 
 axios.defaults.withCredentials = true;
 
-// 환경 변수에서 서버 URL을 가져옵니다
-const serverUrl = process.env.REACT_APP_SERVER_URL;
-
 const Mypage = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
@@ -29,7 +26,7 @@ const Mypage = () => {
     rank: '',   
     employeeId: '', 
     joinDate: '', 
-    name: '',
+    name: '', 
   });
 
   const [isProfileEdit, setIsProfileEdit] = useState(false);
@@ -39,6 +36,9 @@ const Mypage = () => {
   const [approvalList, setApprovalList] = useState([]);
   const [profileImagePreview, setProfileImagePreview] = useState(profileImagePlaceholder);
   const [isLoading, setIsLoading] = useState(true);
+
+  // 환경 변수에서 서버 URL을 가져옵니다
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   const formatDateToString = (date) => {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
@@ -50,18 +50,18 @@ const Mypage = () => {
     const usersName = sessionStorage.getItem('usersName'); 
     const rank = sessionStorage.getItem('rank');
     const employeeId = sessionStorage.getItem('employeeId');
-  
+
     if (!usersSeq) {
       console.error('usersSeq is missing.');
       alert('usersSeq 값이 누락되었습니다. 다시 시도해 주세요.');
       navigate('/users/login');
       return;
     }
-  
+
     try {
       const response = await axios.get(`${serverUrl}/user-update-request/approval-list`);
       const latestRequest = response.data.find(item => item.usersSeq === parseInt(usersSeq) && (item.requestStatus === '승인됨' || item.requestStatus === '거부됨'));
-  
+
       if (latestRequest) {
         setUserInfo(prevState => ({
           ...prevState,
@@ -78,13 +78,28 @@ const Mypage = () => {
           rank: rank || latestRequest.rank,
           employeeId: employeeId || latestRequest.employeeId,
           joinDate: latestRequest.joinDate ? formatDateToString(new Date(latestRequest.joinDate)) : '',
+          name: usersName || latestRequest.userName,
         }));
         setProfileImagePreview(latestRequest.profileImage || profileImagePlaceholder);
+        
+        if (latestRequest.requestStatus === '승인됨') {
+          sessionStorage.setItem('approvedUserInfo', JSON.stringify({
+            phone: latestRequest.phoneNumber,
+            email: latestRequest.email,
+            address: latestRequest.address,
+            zipCode: latestRequest.zipCode,
+            detailedAddress: latestRequest.detailedAddress,
+            profileImage: latestRequest.profileImage,
+            rank: latestRequest.rank,
+            employeeId: latestRequest.employeeId,
+            joinDate: latestRequest.joinDate,
+          }));
+        }
       } else {
         const userProfileResponse = await axios.get(`${serverUrl}/user-profile`, {
           params: { userCode: loginID }
         });
-  
+
         const data = userProfileResponse.data;
         setUserInfo({
           usersSeq: usersSeq,
@@ -99,12 +114,24 @@ const Mypage = () => {
           applicationStatus: sessionStorage.getItem('applicationStatus') || '', 
           profileImage: data.profilePictureUrl || profileImagePlaceholder,
           rank: rank || data.rank,
-          employeeId: employeeId || data.employeeId,
+          employeeId: data.employeeId,
           joinDate: data.joinDate ? formatDateToString(new Date(data.joinDate)) : '',
-          name: data.name || '',
+          name: data.name || '', 
         });
-  
+
         setProfileImagePreview(data.profilePictureUrl || profileImagePlaceholder);
+
+        sessionStorage.setItem('approvedUserInfo', JSON.stringify({
+          phone: data.phoneNumber,
+          email: data.email,
+          address: data.address,
+          zipCode: data.zipCode,
+          detailedAddress: data.detailedAddress,
+          profileImage: data.profilePictureUrl,
+          rank: data.rank,
+          employeeId: data.employeeId,
+          joinDate: data.joinDate,
+        }));
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -112,8 +139,7 @@ const Mypage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [navigate]); // 여기서 serverUrl을 제외하세요
-  
+  }, [serverUrl, navigate]);
 
   useEffect(() => {
     const loginID = sessionStorage.getItem('loginID');
@@ -189,6 +215,20 @@ const Mypage = () => {
     try {
       const currentDate = formatDateToString(new Date());
 
+      const previousUserInfo = {
+        phone: userInfo.phone,
+        email: userInfo.email,
+        address: userInfo.address,
+        zipCode: userInfo.zipCode,
+        detailedAddress: userInfo.detailedAddress,
+        profileImage: userInfo.profileImage,
+        rank: userInfo.rank,
+        employeeId: userInfo.employeeId,
+        joinDate: userInfo.joinDate,
+      };
+
+      sessionStorage.setItem('previousUserInfo', JSON.stringify(previousUserInfo));
+
       const updatedUserInfo = {
         usersSeq: userInfo.usersSeq,
         phoneNumber: userInfo.phone,
@@ -234,19 +274,30 @@ const Mypage = () => {
 
   const handleReject = async (id) => {
     try {
-      await axios.post(`${serverUrl}/user-update-request/reject/${id}`);
-      alert('거부되었습니다.');
-      fetchUserProfile();
-      setIsApprovalListOpen(false);
+        await axios.post(`${serverUrl}/user-update-request/reject/${id}`);
+
+        const approvedUserInfo = JSON.parse(sessionStorage.getItem('approvedUserInfo'));
+        if (approvedUserInfo) {
+            setUserInfo(prevState => ({
+                ...prevState,
+                ...approvedUserInfo,
+                applicationStatus: '거부됨',
+                applicationDate: '',
+            }));
+        }
+
+        alert('거부되었습니다.');
+        fetchUserProfile();
+        setIsApprovalListOpen(false);
     } catch (error) {
-      console.error('Error rejecting request:', error);
+        console.error('Error rejecting request:', error);
     }
-  };
+};
+
 
   const handleProfileImageChange = async (e) => {
     const file = e.target.files[0];
     
-    // 파일 사이즈 제한: 10MB (10 * 1024 * 1024 바이트)
     const maxSize = 10 * 1024 * 1024;
   
     if (file && file.size > maxSize) {
@@ -265,10 +316,8 @@ const Mypage = () => {
           }
         });
   
-        // 서버에서 반환하는 데이터가 파일명인지, 전체 URL인지 확인
         const profileImageUrl = uploadResponse.data;
         
-        // 미리보기와 프로필 이미지를 업데이트
         setProfileImagePreview(profileImageUrl);
         setUserInfo(prevState => ({
           ...prevState,
@@ -281,9 +330,6 @@ const Mypage = () => {
     }
   };
 
-
-
-  
   const loadApprovalList = () => {
     axios.get(`${serverUrl}/user-update-request/approval-list`)
       .then(response => {
@@ -306,7 +352,7 @@ const Mypage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.sub_container}>
-        <SideBar profile_src={profileImagePreview} username={userInfo.email} useremail={userInfo.email} onProfileImageChange={handleProfileImageChange} />
+        <SideBar profile_src={profileImagePreview} username={userInfo.name} useremail={userInfo.email} onProfileImageChange={handleProfileImageChange} />
         <div className={styles.category}>
           <section className={styles.profile}>
             {isProfileEdit ? (
@@ -321,11 +367,11 @@ const Mypage = () => {
               <div className={styles.profileInfo}>
                 <img src={userInfo.profileImage} alt="프로필 이미지" className={styles.profileImage} />
                 <div>
-                  <h2>{userInfo.rank || ''}</h2>
-                  <p>직책: {userInfo.rank || ''}</p>
-                  <p>사번: {userInfo.employeeId || ''}</p>
-                  <p>입사일: {userInfo.joinDate || ''}</p>
-                  <p>이메일: {userInfo.email || ''}</p>
+                  <h2>{userInfo.name || '이름 없음'}</h2>  
+                  <p>직책: {userInfo.rank || ''}</p>  
+                  <p>사번: {userInfo.employeeId || ''}</p>  
+                  <p>입사일: {userInfo.joinDate || ''}</p> 
+                  <p>이메일: {userInfo.email || ''}</p>  
                 </div>
               </div>
             )}
@@ -401,4 +447,4 @@ const Mypage = () => {
   );
 };
 
-export default Mypage;  
+export default Mypage;

@@ -27,8 +27,7 @@ const BoardPostComponent = ({ category }) => {
 
     useEffect(() => {
         if (category) {
-            console.log(category);
-            axios.get(`${serverUrl}/posts/category/${category.category_seq}`)
+            axios.get(`${serverUrl}/board/${category.category_seq}`)
                 .then(resp => {
                     setPosts(resp.data);
                 })
@@ -50,16 +49,16 @@ const BoardPostComponent = ({ category }) => {
     );
 };
 
-const BoardPage = () => {
+const BoardPage = ({onChangeCategory}) => {
     const [categories, setCategories] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+    const [selectedCategory, setSelectedCategory] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         axios.get(`${serverUrl}/board_category`)
             .then(resp => {
                 setCategories(resp.data);
-                setSelectedCategory(resp.data[0]);
+                setSelectedCategory(resp.data[0]); // 초기 카테고리 선택
                 setLoading(false);
             })
             .catch(error => {
@@ -70,6 +69,7 @@ const BoardPage = () => {
 
     const handleCategoryClick = (category) => {
         setSelectedCategory(category);
+        onChangeCategory(category);
     };
 
     if (loading) {

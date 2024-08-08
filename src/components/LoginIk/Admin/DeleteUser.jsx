@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // useNavigate를 import
+import React, { useState, useEffect, startTransition } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './DeleteUser.module.css';
-
-// 환경 변수에서 서버 URL을 가져옵니다
-const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 axios.defaults.withCredentials = true;
 
 const DeleteUser = () => {
-  const [users, setUsers] = useState([]); 
+  const [users, setUsers] = useState([]);
   const [selectedUserCode, setSelectedUserCode] = useState('');
+  const [selectedUserInfo, setSelectedUserInfo] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  
-  const navigate = useNavigate(); // useNavigate 훅 사용
+
+  const navigate = useNavigate();
+  const serverUrl = process.env.REACT_APP_SERVER_URL; // 환경 변수로부터 서버 URL 가져오기
 
   useEffect(() => {
     axios.get(`${serverUrl}/users/all`)
@@ -34,6 +33,18 @@ const DeleteUser = () => {
         alert("유저 목록을 불러오는 중 오류가 발생했습니다.");
       });
   }, [serverUrl]);
+
+  const handleUserChange = (e) => {
+    const userCode = e.target.value;
+    setSelectedUserCode(userCode);
+
+    if (userCode) {
+      const user = users.find(u => u.users_code === userCode);
+      setSelectedUserInfo(user);
+    } else {
+      setSelectedUserInfo(null);
+    }
+  };
 
   const handleDelete = () => {
     if (!selectedUserCode) {
@@ -55,6 +66,7 @@ const DeleteUser = () => {
           alert("유저 제명 성공");
           setUsers(users.filter(user => user.users_code !== selectedUserCode));
           setSelectedUserCode('');
+          setSelectedUserInfo(null);
           navigate('/users/login'); 
         })
         .catch(error => {
@@ -81,17 +93,26 @@ const DeleteUser = () => {
           ) : (
             <select
               value={selectedUserCode}
-              onChange={(e) => setSelectedUserCode(e.target.value)} 
+              onChange={handleUserChange}
             >
               <option value="">유저 선택</option>
               {users.map(user => (
-                <option key={user.users_code} value={user.users_code}> 
+                <option key={user.users_code} value={user.users_code}>
                   {user.users_name} ({user.users_code})
                 </option>
               ))}
             </select>
           )}
         </div>
+        {selectedUserInfo && (
+          <div className={styles.userInfo}>
+            <h3>유저 정보</h3>
+            <p>이름: {selectedUserInfo.users_name}</p>
+            <p>코드: {selectedUserInfo.users_code}</p>
+            <p>이메일: {selectedUserInfo.users_email}</p>
+            <p>관리자 여부: {selectedUserInfo.users_is_admin ? '예' : '아니오'}</p>
+          </div>
+        )}
         <button
           className={styles.deleteButton}
           onClick={handleDelete}

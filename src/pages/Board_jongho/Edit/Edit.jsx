@@ -5,7 +5,9 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/editor';
 import axios from 'axios';
 
-export default function Edit() {
+export default function Edit({category}) {
+
+    const category_seq = category.category_seq;
     const editorRef = useRef(null);
     const [fileComment, setFileComment] = useState("여기를 눌러 추가하거나, 끌어서 추가하세요");
     const [editorInstance, setEditorInstance] = useState(null);
@@ -53,6 +55,8 @@ export default function Edit() {
         axios.post(`${serverUrl}/board`, {
             board_title: boardTitle,
             board_contents: content,
+            // 등록할 때 카테고리 SEQ값과 함께 request 보냄
+            category_seq : category_seq
         })
         .then(response => {
             if (response.status === 200) {
