@@ -15,6 +15,7 @@ import axios from 'axios';
 import Mypage from './components/Mypage/Mypage';
 
 import Approval from './components/Apporoval/ApprovalMain';
+import FileDrive from './components/FileDrive/FileDriveMain';
 
 axios.defaults.withCredentials = true
 
@@ -32,6 +33,7 @@ root.render(
         <Route path="/users/login" element={<Login />} /> 
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/approval" element={<Approval/>} />
+        <Route path="/file" element={<FileDrive/>}/>
       </Routes>
     </BrowserRouter>
 )
