@@ -29,3 +29,8 @@ package-lock.json
 
 #ServerURL
 .env
+
+#firebase
+.firebase/
+.firebaserc
+firebase.json

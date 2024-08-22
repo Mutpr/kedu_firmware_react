@@ -1,0 +1,107 @@
+/* Button Styles */
+.leftButton {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    border: none !important; /* border를 제거 */
+    background-color: #87CEEB !important; /* 하늘색 */
+    color: white !important;
+    transition: background-color 0.3s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.leftButton:hover {
+    background-color: #76b4d6 !important;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.rightButton {
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    border: none !important; /* border를 제거 */
+    background-color: #1E90FF !important; /* 진한 파란색 */
+    color: white !important;
+    transition: background-color 0.3s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.rightButton:hover {
+    background-color: #1C86EE !important;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
+}
+
+
+/* Modal Styles */
+.modal-header {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ddd;
+    padding: 16px 24px;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.modal-body {
+    padding: 16px;
+    font-size: 14px;
+    color: #555;
+}
+
+.modal-footer {
+    background-color: #f7f7f7;
+    border-top: 1px solid #ddd;
+    padding: 16px 24px;
+}
+
+.vacationInfo p {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 8px;
+}
+
+/* Container Styles */
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    padding-bottom: 20px;
+    padding-top : 20px;
+    width: 100%;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+/* Toggle Group Styles */
+.toggleGroup {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.toggleButton {
+    background: none;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    color: #999;
+    font-weight: normal;
+    transition: color 0.3s, font-weight 0.3s;
+}
+
+.selected {
+    color: #000;
+    font-weight: bold;
+}
+
+/* Button Container Styles */
+.buttonContainer {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}

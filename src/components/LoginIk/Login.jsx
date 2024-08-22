@@ -25,42 +25,78 @@ const Login = ({ setIsMypage }) => {
     setAuth((prev) => ({ ...prev, [name]: value }));
   };
 
-  const fetchUserProfile = async (userCode) => {
+  const fetchUserProfile = async (userCode, usersSeq) => {
     try {
       const response = await axios.get(`${serverUrl}/user-profile`, {
         params: { userCode: userCode },
       });
-      const { rank, employeeId, joinDate } = response.data;
+      const { rank, employeeId, joinDate, phoneNumber, email, address, zipCode, detailedAddress, profilePictureUrl } = response.data;
 
+      // 세션에 userProfile 정보 저장
       sessionStorage.setItem('rank', rank || '');
       sessionStorage.setItem('employeeId', employeeId || '');
       sessionStorage.setItem('joinDate', joinDate || '');
+
+      // approvedUserInfo에도 필요한 정보 저장
+      sessionStorage.setItem('approvedUserInfo', JSON.stringify({
+        phone: phoneNumber || '',
+        email: email || '',
+        address: address || '',
+        zipCode: zipCode || '',
+        detailedAddress: detailedAddress || '',
+        profileImage: profilePictureUrl || '',
+        rank: rank || '',
+        employeeId: employeeId || '',
+        joinDate: joinDate || ''
+      }));
     } catch (error) {
       console.error('Error fetching user profile:', error);
       alert('프로필 정보를 가져오는 중 오류가 발생했습니다.');
     }
   };
 
+  // 휴가 상태 확인 및 필요시 지급
+  const checkVacationStatus = (users_seq) => {
+    const joinDate = sessionStorage.getItem('joinDate');  // 입사일 가져오기
+
+    axios.post(`${serverUrl}/vacation/check`, { users_seq, joinDate })  // 입사일 함께 전송
+      .then((response) => {
+        if (response.data.message === "휴가가 지급되었습니다") {
+          console.log("최초 로그인 유저에게 휴가 지급 됌");
+        } else if (response.data.message === "잔여 휴가 체크 완료") {
+          console.log("잔여 휴가 상태 확인 완료:", response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("휴가 체크 중 오류 발생:", error);
+        alert("휴가 상태 확인 중 오류가 발생했습니다.");
+      });
+  };
+
   const handleLogin = () => {
     console.log('로그인 시도 중:', auth);
+    
     axios.post(`${serverUrl}/auth`, auth)
-      .then((resp) => {
+      .then(async (resp) => {
         console.log('서버 응답:', resp.data);
         const { users_code, users_name, users_is_admin, users_seq } = resp.data;
-
+  
         sessionStorage.setItem('loginID', users_code);
         sessionStorage.setItem('usersName', users_name); 
         sessionStorage.setItem('usersSeq', users_seq);
-
+  
         setLoginID(users_code);
         const isAdmin = users_is_admin === 1;
         setIsAdmin(isAdmin);
 
-        // 프로필 정보 가져오기
-        fetchUserProfile(users_code);
+        // 프로필 정보 가져오기 및 세션에 저장
+        fetchUserProfile(users_code, users_seq);
 
+        // 로그인 성공 후 휴가 상태 확인
+        checkVacationStatus(users_seq);
+  
         alert('로그인 성공');
-
+  
         if (isAdmin) {
           navigate('/users/login');
         } else {
@@ -76,6 +112,7 @@ const Login = ({ setIsMypage }) => {
         }
       });
   };
+  
 
   const handleLogout = () => {
     axios.post(`${serverUrl}/auth/logout`)
@@ -88,6 +125,7 @@ const Login = ({ setIsMypage }) => {
         sessionStorage.removeItem('employeeId'); 
         sessionStorage.removeItem('joinDate'); 
         sessionStorage.removeItem('isAdmin');
+        sessionStorage.removeItem('approvedUserInfo');
 
         setLoginID('');
         setAuth({ users_code: '', users_password: '' });

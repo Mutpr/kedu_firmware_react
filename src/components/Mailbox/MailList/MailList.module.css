@@ -1,51 +1,63 @@
-
-.mailContainer{
-    height: 100%;
-    flex-grow: 1;
+.mailContainer {
     display: flex;
     flex-direction: column;
-    overflow-y: hidden;
+    height: 100%;
+    background-color: #f9fafc;
+    overflow: hidden; /* 전체 컨테이너에서 스크롤이 생기지 않도록 설정 */
 }
 
-.sortButtons{
+.sortButtons {
     display: flex;
-    
     justify-content: flex-end;
-    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    background-color: #eef1f7;
+    border-bottom: 1px solid #d1d5da;
 }
 
 .sortButtons select {
-    background: none; /* 드롭다운 배경색 제거 */
-    border: 1px solid #ccc; /* 드롭다운 테두리 설정 */
-    padding: 5px; /* 드롭다운 패딩 설정 */
+    width: 140px;
+    border: 1px solid #d1d5da;
+    padding: 8px;
+    font-size: 14px;
+    background-color: #ffffff;
+    color: #333;
+    border-radius: 4px;
     cursor: pointer;
-    margin: 16px 6px 6px 0; /* 위, 오른쪽, 아래, 왼쪽 */
 }
 
-/* 페이지네이션 스타일 */
+.mailList {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow-y: auto; /* 리스트에 스크롤이 생기도록 설정 */
+    padding-bottom: 50px; /* 페이지네이션과의 간격 설정 */
+}
+
 .pagination {
     display: flex;
     justify-content: center;
-    margin: 10px 0; /* 위, 아래 여백 설정 */
+    padding: 10px 0;
+    background-color: #eef1f7;
+    border-top: 1px solid #d1d5da;
+    flex-shrink: 0; /* 페이지네이션이 리스트의 하단에 고정되도록 설정 */
+    margin-top: auto; /* 리스트의 마지막 요소 아래에 배치되도록 설정 */
 }
 
 .pagination button {
-    background: none;
-    border: 1px solid #ccc;
-    padding: 5px 10px;
-    margin: 0 5px; /* 좌우 여백 설정 */
+    margin: 0 5px;
+    padding: 8px 12px;
+    background-color: #ffffff;
+    border: 1px solid #d1d5da;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s, border-color 0.3s; /* 부드러운 전환 효과 */
+    transition: background-color 0.3s ease;
 }
 
 .pagination button:hover {
-    background-color: #f0f0f0; /* 마우스 오버 시 배경색 */
-    border-color: #999; /* 마우스 오버 시 테두리 색 */
+    background-color: #f1f3f5; /* Hover effect */
 }
 
-.pagination button.active, .pagination button:focus {
-    background-color: #007BFF; /* 선택된 페이지 배경색 */
-    color: white; /* 선택된 페이지 글자색 */
-    border-color: #007BFF; /* 선택된 페이지 테두리 색 */
-    outline: none; /* 포커스 테두리 제거 */
+.pagination button.active {
+    background-color: #007bff; /* Active page background */
+    color: #ffffff;
 }

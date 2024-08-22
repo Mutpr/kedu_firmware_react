@@ -1,182 +1,179 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
 import axios from 'axios';
 import Header from '../../components/Header/Header';
 import Sidebar from '../../components/Sidebar/Sidebar';
+import EmojiPicker from 'emoji-picker-react'; // 이모티콘 선택 라이브러리
+import { FaSmile } from 'react-icons/fa'; // 이모티콘 버튼을 위한 아이콘
 import styles from './Messenger.module.css';
 
 axios.defaults.withCredentials = true;
 
 const Messenger = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([]); // 전체 메시지 저장
+  const [currentChat, setCurrentChat] = useState([]); // 선택된 유저와의 채팅만 저장
   const [inputMessage, setInputMessage] = useState('');
   const [username, setUsername] = useState('');
-  const [client, setClient] = useState(null);
+  const [socket, setSocket] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [users, setUsers] = useState([]);
-  const subscriptionRef = useRef(null);
-  const isSendingMessage = useRef(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false); // 이모티콘 창 표시 상태
+  const unreadCountsRef = useRef({});
+  const messagesEndRef = useRef(null);
+  const messageInputRef = useRef(null); // contenteditable 영역을 참조하는 Ref
+
+  const maxLength = 1000; // 글자 수 제한
 
   const serverUrl = process.env.REACT_APP_SERVER_URL;
 
-  // 메시지 목록을 감싸는 div에 대한 ref
-  const messagesEndRef = useRef(null);
-
-  // 메시지를 표시하는 함수
   const showMessage = useCallback(
     (message) => {
-      setMessages((prevMessages) => {
-        // 이미 존재하는 메시지인지 확인
-        const isDuplicate = prevMessages.some(
-          (msg) =>
-            msg.send_date === message.send_date &&
-            msg.content === message.content &&
-            msg.sender_username === message.sender_username
-        );
-
-        // 중복 메시지가 아니면 추가
-        if (!isDuplicate) {
-          return [...prevMessages, message];
-        }
-
-        return prevMessages; // 중복 메시지는 추가하지 않음
-      });
-    },
-    []
-  );
-
-  // 글로벌 메시지를 구독하는 함수
-  const subscribeToGlobalMessages = useCallback(
-    (client) => {
-      if (subscriptionRef.current) {
-        subscriptionRef.current.unsubscribe(); // 기존 구독 해제
+      setMessages((prevMessages) => [...prevMessages, message]); // 전체 메시지에 저장
+      if (message.sender_username === selectedUser?.users_name || message.receiver_username === selectedUser?.users_name) {
+        setCurrentChat((prevMessages) => [...prevMessages, message]); // 선택된 유저와의 채팅에만 추가
       }
-
-      const globalTopic = '/topic/messages';
-      console.log('Subscribing to global topic:', globalTopic);
-
-      // 메시지를 한 번만 구독하도록 설정
-      subscriptionRef.current = client.subscribe(globalTopic, (message) => {
-        console.log('Received global message:', message.body);
-        showMessage(JSON.parse(message.body));
-      });
+      scrollToBottom();
     },
-    [showMessage]
+    [selectedUser]
   );
 
-  // 컴포넌트가 마운트될 때 한 번 실행되는 코드
   useEffect(() => {
     const loginID = sessionStorage.getItem('loginID');
     if (loginID) {
-      axios
-        .get(`${serverUrl}/users/all`)
-        .then((response) => {
-          const users = response.data;
-          const currentUser = users.find((user) => user.users_code === loginID);
+      // 두 개의 API 호출을 병렬로 실행
+      const fetchUsers = axios.get(`${serverUrl}/users/all`);
+      const fetchEmployees = axios.get(`${serverUrl}/employees/all`);
+
+      Promise.all([fetchUsers, fetchEmployees])
+        .then(([usersResponse, employeesResponse]) => {
+          const users = usersResponse.data;
+          const employees = employeesResponse.data;
+
+          // users 데이터와 employees 데이터를 매칭
+          const mergedUsers = users.map((user) => {
+            const employee = employees.find((emp) => emp.user_seq === user.users_seq);
+            return {
+              ...user,
+              rank_title: user.users_name === 'admin' ? '관리자' : (employee?.rank_title || '직급 없음'),
+              unit_title: user.users_name === 'admin' ? '' : (employee?.unit_title || '부서 없음'),
+            };
+          });
+
+          // 로그인한 유저를 찾음
+          const currentUser = mergedUsers.find((user) => user.users_code === loginID);
           if (currentUser) {
             setUsername(currentUser.users_name);
-            setUsers(users.filter((user) => user.users_name !== currentUser.users_name));
+            setUsers(mergedUsers.filter((user) => user.users_name !== currentUser.users_name));
+
+            axios
+              .get(`${serverUrl}/messages/unread/${currentUser.users_name}`)
+              .then((res) => {
+                unreadCountsRef.current = res.data;
+              })
+              .catch((error) => {
+                console.error('Error fetching unread messages:', error);
+              });
           } else {
-            console.error('로그인한 사용자 정보를 찾을 수 없습니다.');
+            console.error('Unable to find logged-in user information.');
           }
         })
         .catch((error) => {
-          console.error('사용자 정보를 가져오는 중 오류 발생:', error);
+          console.error('Error fetching user or employee information:', error);
         });
     }
 
-    const socket = new SockJS(`${serverUrl}/ws`);
-    const stompClient = new Client({
-      webSocketFactory: () => socket,
-      debug: (str) => console.log(str),
-      onConnect: () => {
-        console.log('Connected to WebSocket');
-        setClient(stompClient);
-        subscribeToGlobalMessages(stompClient); // 구독 설정
-      },
-      onStompError: (frame) => {
-        console.error('WebSocket error: ', frame);
-      },
-      reconnectDelay: 5000,
-    });
+    const wsServerUrl = `${serverUrl.replace(/^http(s?):\/\//, 'ws://')}/ws/chat`;
+    const webSocket = new WebSocket(wsServerUrl);
 
-    stompClient.activate();
+    webSocket.onopen = () => {
+      console.log('Connected to WebSocket');
+      setSocket(webSocket);
+    };
+
+    webSocket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      console.log('Received message:', message);
+
+      if (message.receiver_username === username) {
+        unreadCountsRef.current[message.sender_username] =
+          (unreadCountsRef.current[message.sender_username] || 0) + 1;
+        localStorage.setItem('unreadCounts', JSON.stringify(unreadCountsRef.current));
+      }
+
+      showMessage(message); 
+    };
+
+    webSocket.onclose = () => {
+      console.log('WebSocket connection closed');
+      setSocket(null);
+    };
 
     return () => {
-      if (stompClient) {
-        if (subscriptionRef.current) {
-          subscriptionRef.current.unsubscribe(); // 구독 해제
-        }
-        stompClient.deactivate();
+      if (webSocket) {
+        webSocket.close();
       }
     };
-  }, [serverUrl, subscribeToGlobalMessages]);
+  }, [serverUrl, username, showMessage]);
 
-  // 사용자 선택 시 채팅 기록 로드
   const selectUser = async (user) => {
     setSelectedUser(user);
 
     try {
-      const response = await axios.get(
-        `${serverUrl}/messages/chat/${username}/${user.users_name}`
-      );
-      setMessages(response.data);
-      console.log('Chat history loaded:', response.data);
+      const response = await axios.get(`${serverUrl}/messages/chat/${username}/${user.users_name}`);
+      setCurrentChat(response.data); // 선택된 유저와의 채팅만 불러옴
+
+      await axios.post(`${serverUrl}/messages/read/${username}/${user.users_name}`);
+
+      // 알람 카운트를 0으로 설정하고 상태를 업데이트
+      unreadCountsRef.current[user.users_name] = 0;
+      localStorage.setItem('unreadCounts', JSON.stringify(unreadCountsRef.current));
     } catch (error) {
-      console.error('채팅 기록을 가져오는 중 오류 발생:', error);
+      console.error('Error loading chat history:', error);
     }
   };
 
-  // 메시지를 전송하는 함수
-  const sendMessage = useCallback(() => {
-    if (isSendingMessage.current) {
-      return; // 이미 메시지를 보내고 있는 경우 종료
-    }
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-    const trimmedMessage = inputMessage.trim();
-    if (!trimmedMessage) {
-      console.error('빈 메시지를 보낼 수 없습니다');
+  useEffect(() => {
+    scrollToBottom();
+  }, [currentChat]);
+
+  const sendMessage = useCallback(() => {
+    const content = messageInputRef.current.innerText.trim();
+    if (content === '') {
+      console.error('Cannot send an empty message');
       return;
     }
 
     if (!username.trim() || !selectedUser) {
-      console.error('사용자 이름 또는 선택된 사용자가 필요합니다');
+      console.error('User name or selected user is required');
       return;
     }
 
-    if (client) {
-      isSendingMessage.current = true; // 플래그 설정
-
+    if (socket && socket.readyState === WebSocket.OPEN) {
       const message = {
         sender_username: username,
         receiver_username: selectedUser.users_name,
-        content: trimmedMessage,
+        content: content,
         send_date: new Date().toISOString(),
       };
 
-      client.publish({
-        destination: `/app/chat`,
-        body: JSON.stringify(message),
-      });
-
-      setInputMessage('');
-
-      isSendingMessage.current = false; // 메시지 전송 후 플래그 해제
+      socket.send(JSON.stringify(message));
+      messageInputRef.current.innerText = ''; // 메시지 전송 후 입력창 초기화
     } else {
-      console.error('클라이언트가 연결되어 있지 않습니다');
+      console.error('WebSocket is not connected');
     }
-  }, [inputMessage, username, selectedUser, client]);
+  }, [username, selectedUser, socket]);
 
-  // Enter 키를 누르면 메시지 전송
   const handleKeyDown = useCallback(
     (e) => {
-      if (e.key === 'Enter' && !isSendingMessage.current && inputMessage.trim()) {
-        e.preventDefault(); // 기본 동작 방지
+      if (e.key === 'Enter') {
+        e.preventDefault();
         sendMessage();
       }
     },
-    [sendMessage, inputMessage]
+    [sendMessage]
   );
 
   useEffect(() => {
@@ -186,23 +183,20 @@ const Messenger = () => {
     };
   }, [handleKeyDown]);
 
-  // 메시지 목록의 끝으로 스크롤하는 함수
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const handleInputChange = (e) => {
+    const input = messageInputRef.current.innerText;
+    if (input.length > maxLength) {
+      alert(`메시지는 최대 ${maxLength}자까지 입력 가능합니다.`);
+      messageInputRef.current.innerText = input.slice(0, maxLength);
+    }
   };
 
-  // 메시지가 변경될 때마다 자동으로 스크롤
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  // 시간 형식을 지정하는 함수
-  const formatTime = (timestamp) => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString('ko-KR', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  const onEmojiClick = (emojiObject) => {
+    if (messageInputRef.current.innerText.length + emojiObject.emoji.length <= maxLength) {
+      messageInputRef.current.innerText += emojiObject.emoji; // 이모티콘 추가
+    } else {
+      alert(`이모티콘을 추가하면 ${maxLength}자를 초과합니다.`);
+    }
   };
 
   return (
@@ -216,57 +210,70 @@ const Messenger = () => {
             <ul>
               {users.map((user) => (
                 <li key={user.users_code} onClick={() => selectUser(user)}>
-                  {user.users_name}
+                  {user.users_name} ({user.rank_title} / {user.unit_title})
+                  {unreadCountsRef.current[user.users_name] > 0 && (
+                    <span className={styles.unreadBadge}>
+                      {unreadCountsRef.current[user.users_name]}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
           </div>
+
+          {showEmojiPicker && (
+            <div className={styles.emojiPickerPopup}>
+              <EmojiPicker onEmojiClick={onEmojiClick} />
+            </div>
+          )}
+
           <div className={styles.messengerMain}>
             <div className={styles.chatHeader}>
               채팅방: {selectedUser ? selectedUser.users_name : '선택된 사용자가 없습니다'}
             </div>
             <div className={styles.messengerChat}>
               <ul>
-                {messages
-                  .filter(
-                    (msg) =>
-                      (msg.sender_username === username &&
-                        msg.receiver_username === selectedUser?.users_name) ||
-                      (msg.receiver_username === username &&
-                        msg.sender_username === selectedUser?.users_name)
-                  )
-                  .map((msg, index) => (
-                    <li
-                      key={index}
-                      className={`${styles.messageContainer} ${
-                        msg.sender_username === username
-                          ? styles.messageSent
-                          : msg.type === 'STATUS'
-                          ? styles.messageStatus
-                          : styles.messageReceived
-                      }`}
-                    >
-                      <span>
-                        {msg.type !== 'STATUS'
-                          ? `${msg.sender_username}: ${msg.content}`
-                          : msg.content}
-                        <br />
-                        <small>{formatTime(msg.send_date)}</small>
-                      </span>
-                    </li>
-                  ))}
-                {/* 마지막 메시지 요소를 위한 ref */}
+                {currentChat.map((msg, index) => (
+                  <li key={index} className={styles.messageContainer}>
+                    {msg.sender_username === username ? (
+                      <div className={styles.messageSentWrapper}>
+                        <div className={styles.messageSent}>
+                          {msg.content}
+                          <div className={styles.messageTimeLeft}>
+                            {new Date(msg.send_date).toLocaleTimeString()}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className={styles.messageReceivedWrapper}>
+                        <div className={styles.senderName}>{msg.sender_username}</div>
+                        <div className={styles.messageReceived}>
+                          {msg.content}
+                          <div className={styles.messageTimeRight}>
+                            {new Date(msg.send_date).toLocaleTimeString()}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </li>
+                ))}
                 <div ref={messagesEndRef} />
               </ul>
             </div>
             <div className={styles.messageBox}>
-              <input
-                type="text"
-                placeholder="메세지를 보내주세요"
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                onKeyDown={handleKeyDown}
-              />
+              <button
+                className={styles.emojiButton}
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              >
+                <FaSmile />
+              </button>
+              <div
+                className={styles.editableDiv}
+                contentEditable="true"
+                ref={messageInputRef}
+                onInput={handleInputChange}
+                placeholder="메시지를 입력하세요..."
+              ></div>
             </div>
           </div>
         </div>

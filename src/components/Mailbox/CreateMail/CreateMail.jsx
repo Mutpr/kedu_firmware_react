@@ -1,12 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './CreateMail.module.css';
-
+//
+import { Editor } from '@toast-ui/editor';
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 파일 첨부 크기 제한 5MB로 설정
 
 const CreateMail = () => {
+  // 웹 에디터
+  const editorRef = useRef(null);
+  const [editorInstance, setEditorInstance] = useState(null);
+  useEffect(() => {
+    if (editorRef.current && !editorInstance) {
+        const instance = new Editor({
+            el: editorRef.current,
+            height: '400px',
+            // initialEditType: 'markdown',
+            initialEditType: 'wysiwyg',
+            previewStyle: 'vertical',
+        });
+
+        instance.setMarkdown('');
+        setEditorInstance(instance);
+    }
+}, [editorRef, editorInstance]);
+
+  //
   const location = useLocation(); // 로케이션
   const navigate = useNavigate(); // 메일이 성공적으로 작성된 후 메일함으로 이동시키기 위함
   const [to, setTo] = useState(''); // 받는사람
@@ -62,20 +83,33 @@ const CreateMail = () => {
 
 
 
-  //
   const handleAddAttachment = () => {
-    // '파일 첨부 버튼'을 클릭하면 첨부 리스트에 빈 항목을 추가한다.
-    setAttachments([...attachments, '']);
+    // 현재 첨부 파일의 수가 10개 미만일 때만 첨부 항목을 추가
+    if (attachments.length < 10) {
+      setAttachments([...attachments, '']);
+    } else {
+      alert('최대 10개의 파일만 첨부할 수 있습니다.');
+    }
   };
+  
 
   const handleFileChange = (e, index) => {
-    // 파일이 변경되면 해당 파일을 첨부 리스트의 특정 인덱스에 업데이트
+    const file = e.target.files[0];
+  
+    // 파일 크기 제한
+    if (file.size > MAX_FILE_SIZE) {
+      alert('파일 크기는 5MB를 초과할 수 없습니다.');
+      e.target.value = '';  // 파일 input을 초기화하여 첨부되지 않도록 함
+      return;
+    }
+  
     const files = [...attachments];
-    files[index] = e.target.files[0];
+    files[index] = file;
     setAttachments(files);
   };
+  
 
-  // 제목 길이 제어 로직 추가
+  // 제목 길이 제어 로직
   // 제목 길이가 100자가 넘어가면 제한에 걸리고, 초과된 부분은 잘라내어 저장함
   const handleSubjectChange = (e) => {
     let inputSubject = e.target.value;
@@ -90,15 +124,27 @@ const CreateMail = () => {
     // async -> await 키워드를 사용하기위하여 필요
     // -> 에러 핸들링을 간단하게 하기위함
 
+
+    // HTML 내용을 가져와 <p> 태그 제거
+  const content = editorInstance.getHTML(); // 여기서 getHTML()을 호출해야 함
+  
+  setMessage(content);
+
+
     console.log(to);
     console.log(subject);
-    console.log(message);
+    console.log(content)
+    // console.log(message);
+
+    
+    
+    
 
     // FormData 객체에 폼데이터를 추가하고 서버로 전송
     const formData = new FormData();
     formData.append('to', to);
     formData.append('subject', subject);
-    formData.append('message', message);
+    formData.append('message', content);
     attachments.forEach((file) => {
       formData.append(`attachments`, file);
     });
@@ -120,7 +166,10 @@ const CreateMail = () => {
       console.error('메일 전송 오류:', error);
       if (error.response && error.response.status === 404) {
         alert("해당하는 이메일의 유저가 없습니다.");
-      } else {
+      } else if (error.response && error.response.status === 413) {
+        alert("파일 크기가 너무 큽니다. 파일 크기를 줄여 다시 시도해 주세요.");
+      }
+      else {
         alert('메일 전송 중 오류가 발생했습니다.');
       }
     }
@@ -195,10 +244,11 @@ const CreateMail = () => {
       </div>
       <div className={styles.formGroup}>
         <label>내용</label>
-        <textarea value={message} 
+        {/* <textarea value={message} 
           onChange={(e) => setMessage(e.target.value)} 
           required 
-        />
+        /> */}
+        <div ref={editorRef}></div>
       </div>
       <button type="button" onClick={handleSubmit} className={styles.submitButton}>보내기</button>
     </div>

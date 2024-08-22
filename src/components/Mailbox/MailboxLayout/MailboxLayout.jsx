@@ -28,8 +28,12 @@ const MailboxLayout = () => {
                                     <MailListActions />
                                 </div>
                                 <div className={styles.mailArea}>
-                                    <MailList/>
-                                    <MailContent/>
+                                    <div className={styles.mailList}>
+                                        <MailList/>
+                                    </div>
+                                    <div className={styles.mailContent}>
+                                        <MailContent/>
+                                    </div>
                                 </div>
                             </>
                         }/>

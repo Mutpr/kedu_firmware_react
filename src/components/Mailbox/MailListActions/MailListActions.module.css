@@ -2,7 +2,7 @@
 .mailListActions {
     display: flex;
     align-items: center;
-    position: relative; /* 자식 요소의 위치 설정 기준 */
+    position: relative;
 }
 
 .searchInput{
