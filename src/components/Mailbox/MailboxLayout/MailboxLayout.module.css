@@ -1,4 +1,3 @@
-/* src/components/MailboxLayout.module.css */
 .mailboxLayout {
     display: flex;
     height: 100vh;
@@ -6,29 +5,52 @@
     border-bottom: 1px solid #ccc;
     margin-bottom: 6px;
     flex-direction: column;
-} 
+    background-color: #f4f7fc; 
+    font-family: 'Roboto', sans-serif;
+}
 
-.mailboxBody{
+.mailboxBody {
     display: flex;
+    flex: 1;
 }
 
 .contentArea {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    
+    background-color: #ffffff;
+    border-left: 1px solid #e1e4e8;
 }
 
 .mailListActions {
     width: 100%;
     padding: 15px;
-    background-color: #f6f7fa;
+    background-color: #eef1f7;
     flex-shrink: 0;
+    border-bottom: 1px solid #d1d5da;
 }
-
 
 .mailArea {
     display: flex;
     flex-grow: 1;
-   
+    border-top: 1px solid #d1d5da;
+}
+
+.mailList, .mailContent {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.mailList {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background-color: #f9fafc;
+    max-height: calc(100vh - 145px);
+}
+
+
+.mailContent {
+    background-color: #ffffff;
 }

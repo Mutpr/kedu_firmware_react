@@ -1,117 +1,209 @@
-.button_container {
-    display: flex;
-    flex-direction: row;
-    gap: 10px; /* 버튼들 사이의 간격을 추가 */
-}
-
-.button {
-    background-color: transparent;
-    color: #007bff;
-    border: 2px solid #007bff;
-    padding: 10px 15px;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    margin: 5px;
-}
-
-.button:hover {
-    background-color: #007bff;
-    color: #ffffff;
-}
-
-.button:active {
-    background-color: #0056b3;
-    color: #ffffff;
-}
-
-.button:focus {
-    outline: none;
-    background-color: #0056b3;
-    color: #ffffff;
-}
-
+/* 전체 컨테이너 스타일 */
 .container {
-    padding: 20px;
+    padding: 15px;
     position: relative;
 }
 
+/* 헤더 스타일 */
 .header {
     border-bottom: 2px solid #e0e0e0;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 }
 
+/* 제목 스타일 */
 .title {
     font-size: 2rem;
     color: #333;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     font-weight: 600;
+    display: flex;
+    align-items: center;
 }
 
+/* 수정 모드에서 제목 스타일 */
+.editMode .title {
+    background-color: #f0f8ff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* 헤더 버튼 컨테이너 */
+.headerButtons {
+    display: flex;
+    gap: 15px;
+}
+
+/* 본문 및 콘텐츠 공통 스타일 */
 .body, .content {
+    width: 100%;
     font-size: 1rem;
     color: #555;
 }
 
-.body div, .content div {
-    margin-bottom: 15px;
-    line-height: 1.6;
+
+
+.content div img{
+width: 500x;
+height: 500px;
 }
 
+
+/* 본문 및 콘텐츠의 strong 태그 스타일 */
 .body strong, .content strong {
     font-weight: 600;
     color: #333;
 }
 
+/* 콘텐츠 영역 스타일 */
 .content {
     border-top: 1px solid #e0e0e0;
-    padding-top: 15px;
-    margin-top: 20px;
+    padding-top: 20px;
+    margin-top: 30px;
     overflow-wrap: break-word;
     white-space: pre-wrap;
-    overflow-y: auto;
-    max-height: 300px;
+    /* overflow-y: auto; */
+    max-height: 500px;
 }
 
-.textarea {
-    border: 1px solid #ccc;
+/* 댓글 섹션 스타일 */
+.commentsSection {
+    margin-top: 20px;
+}
+
+/* 각 댓글 스타일 */
+.comment {
+    margin-bottom: 15px;
     padding: 10px;
-    width: 100%;
-    min-height: 150px;
-    font-size: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+/* 댓글 작성자와 날짜 스타일 */
+.commentHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 댓글 수정 폼 스타일 */
+.commentEditForm {
     margin-top: 10px;
 }
 
-.comments_Section {
-    margin-top: 20px;
-}
-
-.comment {
-    margin-bottom: 20px;
-}
-
-.comment_Input {
-    border: 1px solid #ccc;
-    padding: 10px;
-    width: 100%;
-    min-height: 50px;
-    font-size: 1rem;
-}
-
-.editForm {
+/* 댓글 입력 폼 스타일 */
+.commentForm {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin-top: 20px;
 }
 
-.bookmarkIcon {
-    margin-left: 10px;
-    color: #ff9a9a; 
+/* 텍스트 영역 스타일 */
+.textarea {
+    border: 1px solid #ccc;
+    padding: 6px;
+    width: 99%;
+    height: 50px;
+    font-size: 0.875rem;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+.textarea_edit {
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 6px;
+    height: 150px; /* Increased height for editing */
+    font-size: 0.875rem;
+    border-radius: 5px;
+}
+
+/* 댓글 작성 버튼 스타일 */
+.replyButton {
+    height: 50px;
+    border-radius: 5px;
+    border: 2px solid #007bff;
     cursor: pointer;
 }
 
+.replyButton:hover {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.replyButton:active {
+    background-color: #0056b3;
+    color: #ffffff;
+}
+
+.replyButton:focus {
+    outline: none;
+    background-color: #0056b3;
+    color: #ffffff;
+}
+
+/* 버튼 호버 상태 스타일 */
+.button {
+    background-color: transparent;
+    color: #007bff;
+    border: 2px solid #007bff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 2px;
+}
+
+/* 북마크 아이콘 스타일 */
+.bookmarkIcon {
+    margin-left: 10px;
+    color: #ff9a9a;
+    cursor: pointer;
+}
+
+/* 드롭다운 버튼 스타일 */
+.dropdownContainer {
+    position: relative;
+}
+
+/* 드롭다운 메뉴 스타일 */
+.dropdownMenu {
+    position: relative;
+    right: -10px;
+    top: -70px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 5px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdownItem {
+    padding: 8px 16px;
+    color: #007bff;
+    background: transparent;
+    border: none;
+    /* cursor: pointer; */
+    text-align: left;
+
+}
+
+.dropdownItem:hover {
+    background-color: #f0f0f0;
+}
+
+.dropdownToggle{
+    position: fixed;
+    left: 91%;
+    top: 59%;
+    font-size: 12px;
+}

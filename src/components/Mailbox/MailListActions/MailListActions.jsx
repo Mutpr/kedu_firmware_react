@@ -19,6 +19,11 @@ const MailListActions = () => {
             console.log("선택된 메일함이 없습니다.");
             return;
         }
+
+        // 삭제 확인 대화 상자
+        const confirmDelete = window.confirm("정말로 이 메일함을 삭제하시겠습니까?");
+  
+        if (confirmDelete) {
         console.log("현재 선택된 메일 Seq: " + selectedMailSeq);
         axios.delete(`${serverUrl}/mailbox/${selectedMailSeq}`).then(() => {
           handleGetAll();
@@ -29,7 +34,10 @@ const MailListActions = () => {
               setSelectedMailContent(resp.data);
               setSelectedMailSeq(null);
             })
-          })
+          });
+        } else {
+            console.log("메일함 삭제 취소")
+        }
       };
     
     const handleComposeMail = () => {
@@ -53,8 +61,9 @@ const MailListActions = () => {
               index === self.findIndex((m) => m.mail_seq === mail.mail_seq)
           );
 
-          setMails(filteredMails);
+          setMails({ mails: filteredMails, total: filteredMails.length });
           setSelectedMailContent([]); // 검색 후 content 초기화
+          setPreviewResults([]);
       });
   };
 
@@ -88,11 +97,17 @@ const MailListActions = () => {
 
     // `setMails`에 검색된 결과 중 첫 번째 메일만 배열로 설정
     if (searchResults && searchResults.length > 0) {
-      setMails([searchResults[0]]); // 첫 번째 메일만 설정
+      setMails({ mails: [searchResults[searchResults.length - 1]], total: 1 }); // 첫 번째 메일만 설정
       setSelectedMailContent(searchResults[0]);
       setPreviewResults([]);
     }
     });
+  };
+
+
+  const stripHtmlTags = (str) => {
+    // HTML 태그를 제거하는 정규식
+    return str.replace(/<[^>]*>?/gm, '');
   };
 
     return (
@@ -110,7 +125,7 @@ const MailListActions = () => {
                             onClick={() => handlePreviewClick(mail.mail_seq)} // 미리보기 항목 클릭 시 메일 목록 업데이트
                         >
                             <div className={styles.previewTitle}>{mail.mail_title}</div>
-                            <div className={styles.previewContent}>{mail.mail_content}</div>
+                            <div className={styles.previewContent}>{stripHtmlTags(mail.mail_content)}</div>
                         </div>
                     ))}
                 </div>

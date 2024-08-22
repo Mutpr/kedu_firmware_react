@@ -1,150 +1,197 @@
 .messengerContainer {
     display: flex;
     flex-direction: column;
-    height: 100vh; /* 화면 전체 높이를 사용 */
-}
-
-.mainContent {
+    height: 100vh;
+  }
+  
+  .mainContent {
     display: flex;
     flex: 1;
-}
-
-.messengerBody {
+  }
+  
+  .messengerBody {
     display: flex;
     flex: 1;
     padding: 20px;
-    box-sizing: border-box; /* Padding 포함하여 크기 계산 */
-    background-color: #f5f7fa; /* 배경색 설정 */
-}
-
-.messengerSidebar {
-    width: 300px;
+    box-sizing: border-box;
+    background-color: #f5f7fa;
+    height: calc(100vh - 100px); /* Header 높이 제외한 고정 크기 */
+  }
+  
+  /* 사이드바 */
+  .messengerSidebar {
+    width: 250px;
     margin-right: 20px;
     border-radius: 8px;
     border: 1px solid #ddd;
-    box-sizing: border-box;
     overflow: hidden;
-    background-color: #ffffff; /* 하얀 배경 */
-}
-
-.sidebarHeader {
-    background-color: #3db8ff;
+    background-color: #ffffff;
+  }
+  
+  .sidebarHeader {
+    background-color: #007bff;
     color: #fff;
     text-align: center;
     padding: 10px 0;
     font-weight: bold;
     border-bottom: 1px solid #ddd;
-}
-
-.messengerSidebar ul {
+  }
+  
+  .messengerSidebar ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
-    height: 100%;
+    height: calc(100vh - 120px); /* 전체 높이에서 Header와 padding 크기를 뺀 고정 높이 */
     overflow-y: auto;
-}
-
-.messengerSidebar li {
+  }
+  
+  .messengerSidebar li {
+    position: relative;
     padding: 10px;
     cursor: pointer;
     border-bottom: 1px solid #f0f0f0;
     transition: background-color 0.2s;
-}
-
-.messengerSidebar li:hover {
+  }
+  
+  .unreadBadge {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #ff0000;
+    color: #ffffff;
+    border-radius: 50%;
+    padding: 3px 8px;
+    font-size: 0.8em;
+  }
+  
+  .messengerSidebar li:hover {
     background-color: #f7f7f7;
-}
-
-.messengerMain {
+  }
+  
+  .messengerMain {
+    flex: 1;
     display: flex;
     flex-direction: column;
     border-radius: 8px;
     border: 1px solid #ddd;
     background-color: #ffffff;
-    overflow: hidden;
-    height: 850px;
-    width: 600px;
-}
-
-.chatHeader {
-    background-color: #3db8ff;
-    color: #fff;
+  }
+  
+  .chatHeader {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
     text-align: center;
-    padding: 10px 0;
     font-weight: bold;
     border-bottom: 1px solid #ddd;
-}
-
-.messengerChat {
+  }
+  
+  /* 채팅 목록 영역 */
+  .messengerChat {
     flex: 1;
     padding: 20px;
-    overflow-y: auto;
-    background-color: #f7f9fc; /* 채팅 배경색 */
-}
-
-.messengerChat ul {
-    width: 100%; /* ul 요소의 너비를 부모 컨테이너에 꽉 차게 설정 */
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-}
-
-.messageBox {
+    overflow-y: auto; /* 스크롤 활성화 */
+    background-color: #f7f9fc;
+    max-height: 700px; /* 채팅 창의 고정 높이 */
+  }
+  
+  .messageContainer {
     display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+  
+  .messageSentWrapper {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .messageSent {
+    background-color: #f1c40f;
     padding: 10px;
-    border-top: 1px solid #ddd;
+    border-radius: 10px;
+    max-width: 60%;
+  }
+  
+  .messageTimeLeft {
+    font-size: 0.75em;
+    color: #888;
+    text-align: right;
+  }
+  
+  .messageReceivedWrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .messageReceived {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 60%;
+  }
+  
+  .messageTimeRight {
+    font-size: 0.75em;
+    color: #888;
+    text-align: left;
+  }
+  
+  .senderName {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .messageBox {
+    display: flex;
+    align-items: center;
+    padding: 10px;
     background-color: #f9f9f9;
-}
+    border-top: 1px solid #ddd;
 
-.messageBox input {
+  }
+  
+  .messageBox input {
     flex: 1;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-}
+    margin-right: 10px;
+  }
+  
+  .emojiButton {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .emojiPicker {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    margin-top: 5px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 
-.messageContainer {
-    display: flex;
-    margin-bottom: 10px;
-    align-items: center;
-    width: 50%; /* 메시지 컨테이너도 전체 너비를 사용 */
-}
-
-.messageSent {
-    background-color: #dcf8c6;
-    padding: 10px;
+  .emojiPickerPopup {
+    position: absolute;
+    top: 350px; /* 상단에 고정 */
+    left: 100px; /* 왼쪽 기준 위치 설정 */
+    z-index: 1000; /* 다른 요소 위로 출력되도록 설정 */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    max-width: 50%;
-    margin-left: auto; /* 메시지를 오른쪽으로 정렬 */
-    margin-bottom: 10px;
-}
-
-.messageReceived {
-    background-color: #ffffff;
+    background-color: white;
     padding: 10px;
-    border-radius: 10px;
-    max-width: 60%;
-    margin-left: 0; /* 왼쪽 여백을 제거하여 메시지를 왼쪽으로 붙임 */
-    margin-bottom: 10px;
-    text-align: left; /* 텍스트를 왼쪽 정렬 */
-    margin-right: auto; /* 오른쪽 여백 자동 설정 */
-}
+  }
 
-.messageStatus {
-    text-align: center;
-    font-style: italic;
-    color: #888;
-}
-
-.messengerSidebar::-webkit-scrollbar, .messengerChat::-webkit-scrollbar {
-    width: 8px;
-}
-
-.messengerSidebar::-webkit-scrollbar-thumb, .messengerChat::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 4px;
-}
-
-.messengerSidebar::-webkit-scrollbar-track, .messengerChat::-webkit-scrollbar-track {
-    background-color: transparent;
-}
+  .editableDiv:empty:before {
+    content: attr(placeholder);
+    color: #aaa;
+  }
+  

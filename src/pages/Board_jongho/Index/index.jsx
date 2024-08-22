@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import styles from './index.module.css';
-import SideBar from '../../../components/Jongho/SideBar';
+// import SideBar from '../../../components/Jongho/SideBar';
+import SideBar from '../../../components/Sidebar/Sidebar';
+
 import BoardPage from '../../../config/BoardCategory';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import List from '../List/List';
 import BoardEdit from '../Edit/Edit';
 import BoardDetail from '../Detail/Detail';
 
 const BoardIndex = (host) => {
     const [selectedCategory, setSelectedCategory] = useState({});
+    const navigate = useNavigate();
 
     const serverUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -19,8 +22,7 @@ const BoardIndex = (host) => {
                 <div className={styles.category}>
                     <div className={styles.category_content}>
                         <h1>게시판</h1>
-                        <BoardPage onChangeCategory={(e)=>setSelectedCategory(e)}  />
-                        {/* {1. 카테고리 선택할때마다 setSelectedCategory로 현재 선택한 카테고리가 업데이트 됨.} */}
+                        <BoardPage onChangeCategory={(e)=>{setSelectedCategory(e); navigate('./')}}  />
                     </div>
                 </div>
                 <div className={styles.content}>

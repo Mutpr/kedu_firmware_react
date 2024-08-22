@@ -376,6 +376,8 @@ const Mypage = () => {
               </div>
             )}
           </section>
+        
+
         </div>
         <div className={styles.content}>
           <section className={styles.details}>

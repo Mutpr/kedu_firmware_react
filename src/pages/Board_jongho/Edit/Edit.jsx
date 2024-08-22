@@ -52,7 +52,7 @@ export default function Edit({category}) {
             return;
         }
 
-        axios.post(`${serverUrl}/board`, {
+        axios.post(`${serverUrl}:3000/board`, {
             board_title: boardTitle,
             board_contents: content,
             // 등록할 때 카테고리 SEQ값과 함께 request 보냄
