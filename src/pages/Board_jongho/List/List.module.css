@@ -1,21 +1,22 @@
 /* 전체 레이아웃 스타일 */
 .container {
-    width: calc(100% - 40px); /* 좌우 여백을 줄여서 전체 너비 사용 */
+    width: calc(100% - 40px);
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 5px;
     background-color: #fff;
-    position: relative; /* 버튼을 절대 위치로 배치하기 위해 상대 위치 설정 */
+    position: relative;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding-bottom: 60px; /* 페이지네이션을 위한 여백 추가 */
 }
 
 /* 카테고리 헤더 스타일 */
 .categoryHeader {
     display: flex;
-    justify-content: space-between; /* 제목과 버튼들을 양 끝으로 배치 */
+    justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid #f0f0f0;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
+    margin: 20px;
 }
 
 .headerLeft {
@@ -27,6 +28,7 @@
     font-size: 1.5rem;
     color: #333;
     margin-right: 10px;
+    cursor: pointer;
 }
 
 .headerRight {
@@ -36,13 +38,12 @@
 }
 
 #write {
-    color: #007bff;
+    display: inline-block;
+    color: #333; 
     text-decoration: none;
-    padding: 8px 12px;
-    border: 1px solid #007bff;
-    font-size: 0.9rem;
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
 }
 
 #write:hover {
@@ -50,13 +51,8 @@
     color: #fff;
 }
 
-/* 정렬 버튼 스타일 */
-.sortButtons {
-    display: flex;
-    gap: 10px;
-}
-
-.sortButtons button {
+/* 버튼 스타일 */
+button {
     padding: 8px 12px;
     border: 1px solid #007bff;
     border-radius: 5px;
@@ -67,12 +63,19 @@
     transition: background-color 0.3s, color 0.3s;
 }
 
-.sortButtons button:hover {
+button:hover {
     background-color: #007bff;
     color: #fff;
 }
 
-.sortButtons button.active {
+button:disabled {
+    cursor: not-allowed;
+    color: #ccc;
+    border-color: #ccc;
+}
+
+/* 활성화된 버튼 스타일 */
+button.active {
     background-color: #007bff;
     color: #fff;
     border-color: #007bff;
@@ -81,7 +84,8 @@
 /* 내용 스타일 */
 .content {
     width: 100%;
-    position: relative; /* 삭제 버튼을 절대 위치로 배치하기 위해 상대 위치 설정 */
+    position: relative;
+    flex: 1 0 auto;
 }
 
 .content table {
@@ -92,13 +96,13 @@
 .content th, .content td {
     padding: 8px 15px;
     border-bottom: 1px solid #e0e0e0;
+    text-align: left;
 }
 
 .content th {
     background-color: #f9f9f9;
     color: #333;
     font-weight: 600;
-    text-align: left;
 }
 
 .content tr:nth-child(even) {
@@ -115,7 +119,6 @@
 }
 
 .content td {
-    text-align: left;
     color: #555;
 }
 
@@ -129,10 +132,10 @@
 .checkboxContainer input[type="checkbox"] {
     width: 20px;
     height: 20px;
-    margin-right: 10px; /* 체크박스와 텍스트 간의 간격 */
+    margin-right: 10px;
 }
 
-/* 선택된 항목 삭제 버튼 스타일 */
+/* 삭제 버튼 스타일 */
 .deleteButton {
     padding: 8px 12px;
     border: 1px solid #dc3545;
@@ -150,22 +153,60 @@
     color: #fff;
 }
 
-.deleteButton:disabled {
-    cursor: not-allowed;
-    color: #ccc;
-    border-color: #ccc;
-}
-
 /* 페이지네이션 스타일 */
 .pagination {
+    position: relative;
+    width: 100%;
     display: flex;
     justify-content: center;
     margin-top: 20px;
+    padding: 8px 12px;
+    box-sizing: border-box;
 }
 
-.pagination button {
+.pagination a, .pagination button {
+    display: inline-block;
     padding: 8px 12px;
-    margin: 0 5px;
+    margin: 0 4px;
+    font-size: 0.9rem;
+    color: #333;
+    text-decoration: none;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    text-align: center;
+}
+
+.pagination a:hover, .pagination button:hover {
+    background-color: #f1f1f1;
+    color: #007bff;
+}
+
+.pagination .active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination .disabled {
+    color: #ccc;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.pagination .ellipsis {
+    pointer-events: none;
+    color: #333;
+}
+
+/* 드롭다운 컨테이너 */
+.dropdownContainer {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdownToggle {
+    padding: 8px 12px;
     border: 1px solid #007bff;
     border-radius: 5px;
     background-color: #fff;
@@ -175,20 +216,48 @@
     transition: background-color 0.3s, color 0.3s;
 }
 
-.pagination button:hover {
+.dropdownToggle:hover {
     background-color: #007bff;
     color: #fff;
 }
 
-.pagination button:disabled {
-    cursor: not-allowed;
+.dropdownMenu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 10px 0;
+    margin-top: 5px;
+    z-index: 1000;
+}
+
+.dropdownMenu li {
+    padding: 8px 12px;
+    white-space: nowrap;
+    cursor: pointer;
+    list-style: none;
+}
+
+.dropdownMenu li:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdownMenu li a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.dropdownMenu li button {
+    border: none;
+    background: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.dropdownMenu li button:disabled {
     color: #ccc;
-    border-color: #ccc;
+    cursor: not-allowed;
 }
-
-.pagination button.active {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
-}
-

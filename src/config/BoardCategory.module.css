@@ -5,32 +5,32 @@
     flex-direction: column;
     margin: 0 auto;
     padding: 20px;
-    background: #e6f7ff; /* 하늘색 배경 */
+    background: #e6f7ff; 
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .category {
     padding: 12px 20px;
-    margin-bottom: 10px; /* 간격을 좀 더 넓게 */
-    border-radius: 8px; /* 모서리 둥글게 */
+    margin-bottom: 10px; 
+    border-radius: 8px; 
     background-color: #ffffff;
     color: #333333;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     user-select: none;
-    border: 1px solid #d9d9d9; /* 경계선 추가 */
+    border: 1px solid #d9d9d9;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .category:hover {
-    background-color: #b3e0ff; /* 마우스 오버 시 하늘색 */
-    color: #0056b3; /* 텍스트 색상 변경 */
+    background-color: #b3e0ff; 
+    color: #0056b3; 
 }
 
 .category.selected {
-    background-color: #3db8ff; /* 선택된 항목의 하늘색 */
+    background-color: #3db8ff; 
     color: #ffffff;
     font-weight: bold;
 }

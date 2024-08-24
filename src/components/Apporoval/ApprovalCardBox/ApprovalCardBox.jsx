@@ -12,7 +12,7 @@ const ApprovalCard = () => {
                         
                         <Card.Body>
                             <Card.Text>
-                                <h6>처리 대기 중인 결재</h6>
+                                <h6>남은 휴가</h6>
                                 <h3>5</h3>
                             </Card.Text>
                         </Card.Body>
@@ -23,7 +23,7 @@ const ApprovalCard = () => {
                     <Card style={{ width: '287px', height: '90px' }}>
                         <Card.Body>
                             <Card.Text>
-                                <h6>처리 완료 된 결재</h6>
+                                <h6>총 출석 일수</h6>
                                 <h3>5</h3>
                             </Card.Text>
                         </Card.Body>

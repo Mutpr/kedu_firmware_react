@@ -1,0 +1,129 @@
+.container {
+    padding-left: 10px;
+    min-height: 80vh; /* 화면 전체 높이를 차지하도록 설정 */
+    display: flex;
+    flex-direction: column;
+}
+
+
+.app {
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+  
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+  
+.header button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+  
+.header button:hover {
+    background-color: #e0e0e0;
+}
+  
+.header span {
+    font-size: 16px;
+    font-weight: bold;
+}
+  
+.calendar {
+    display: grid;
+    grid-template-columns: 150px repeat(24, 1fr); /* 부서원 이름 열과 24시간 열 */
+    gap: 1px;
+}
+  
+.timeRow {
+    display: contents;
+}
+  
+.dateRow {
+    display: contents;
+}
+  
+.timeCell {
+    background-color: #f7f7f7;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+  
+.memberCell {
+    background-color: #f7f7f7;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border-right: 1px solid #ddd;
+    width: 150px;  /* 이름 열의 넓이를 조정 */
+}
+  
+.cell {
+    border-left: none; /* 세로선 제거 */
+    border-right: none; /* 세로선 제거 */
+    height: 60px; /* 각 행의 높이를 더 늘림 */
+    position: relative; /* 의사 요소의 포지셔닝을 위해 필요 */
+}
+  
+.cell::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.1); /* 불투명한 선 */
+}
+  
+.workHour {
+    background-color: #f0f8ff;
+}
+  
+.selected {
+    background-color: #eaf7ff;
+}
+  
+.event {
+    background-color: #ffcc00;
+    border: none;
+    color: #333;
+    border-radius: 4px;
+    padding: 2px 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    overflow: hidden;
+    text-align: center;
+    width: 100%;
+    font-size: 12px;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.event span {
+    font-size: calc(10px + 0.4vw); /* 텍스트 크기가 부모 요소에 맞게 조정되도록 설정 */
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+    line-height: 1.2;
+}

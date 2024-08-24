@@ -1,0 +1,49 @@
+/* MainBoard.module.css */
+
+.mainBoard {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.mainBoard h2 {
+    font-size: 1.5rem; /* 폰트 크기 크게 설정 */
+    font-weight: bold; /* 글꼴 두께 설정 */
+    margin-bottom: 20px; /* 아래쪽 여백 설정 */
+    color: #333; /* 텍스트 색상 */
+}
+
+.mainBoard table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.mainBoard th, .mainBoard td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.mainBoard th {
+    background-color: #f9f9f9;
+    font-weight: 700;
+    color: #333;
+}
+
+.mainBoard td a {
+    color: black;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.mainBoard td a:hover {
+    color: #0056b3;
+}
+
+

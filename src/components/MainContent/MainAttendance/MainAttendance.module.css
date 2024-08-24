@@ -1,0 +1,61 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;  /* 각 섹션 사이에 간격 추가 */
+}
+
+.attendanceContainer, .profileContainer {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  min-height: 230px;  /* 최소 높이 설정 */
+  overflow-y: auto;  /* 내용이 많을 경우 스크롤 생성 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 출근 현황 항목 스타일 */
+.attendance_item, .profile_item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.attendance_item:last-child, .profile_item:last-child {
+  border-bottom: none;
+}
+
+.attendance_label, .profile_name {
+  flex-basis: 30%; /* 크기 조정 */
+  font-weight: bold;
+}
+
+.attendance_status {
+  flex-basis: 30%; /* 크기 조정 */
+  text-align: center;
+  color: #28a745; /* 출근 완료 상태를 나타내는 초록색 */
+}
+
+.attendance_time {
+  flex-basis: 40%; /* 크기 조정 */
+  text-align: right;
+  color: #888;
+}
+
+.profile_email {
+  flex-basis: 40%; /* 크기 조정 */
+  text-align: center;
+  color: #666;
+}
+
+.profile_phone {
+  flex-basis: 30%; /* 크기 조정 */
+  text-align: right;
+  color: #888;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 1.5em;
+}

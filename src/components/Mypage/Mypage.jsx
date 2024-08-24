@@ -6,6 +6,7 @@ import AddressModal from './Address/Address';
 import ApprovalListModal from './Approval/Approval_List';
 import SideBar from './SideBar/SideBar';
 import profileImagePlaceholder from '../../assets/image.png';
+import M_Header from './M_Header/M_Header';  // C_Header import 추가
 
 axios.defaults.withCredentials = true;
 
@@ -198,8 +199,44 @@ const Mypage = () => {
     setIsAddressOpen(false);
   };
 
+  const validateForm = () => {
+    const phoneRegex = /^[0-9-]{1,15}$/;
+    const zipCodeRegex = /^[0-9]*$/;
+
+    if (!userInfo.phone || !phoneRegex.test(userInfo.phone)) {
+      alert('전화번호는 15글자 이하의 숫자와 하이픈(-)만 입력 가능합니다.');
+      return false;
+    }
+
+    if (!userInfo.address) {
+      alert('주소를 입력해 주세요.');
+      return false;
+    }
+
+    if (!userInfo.zipCode || !zipCodeRegex.test(userInfo.zipCode)) {
+      alert('우편 번호는 숫자만 입력 가능합니다.');
+      return false;
+    }
+
+    if (!userInfo.detailedAddress) {
+      alert('상세 주소를 입력해 주세요.');
+      return false;
+    }
+
+    if (!userInfo.reason) {
+      alert('변경 사유를 입력해 주세요.');
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
 
     if (userInfo.applicationStatus === '대기 중') {
       alert('이미 "대기 중" 상태인 수정 요청이 존재합니다. 승인이 완료된 후에 다시 시도해 주세요.');
@@ -292,7 +329,7 @@ const Mypage = () => {
     } catch (error) {
         console.error('Error rejecting request:', error);
     }
-};
+  };
 
 
   const handleProfileImageChange = async (e) => {
@@ -350,99 +387,104 @@ const Mypage = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.sub_container}>
-        <SideBar profile_src={profileImagePreview} username={userInfo.name} useremail={userInfo.email} onProfileImageChange={handleProfileImageChange} />
-        <div className={styles.category}>
-          <section className={styles.profile}>
-            {isProfileEdit ? (
-              <form onSubmit={(e) => { e.preventDefault(); setIsProfileEdit(false); }}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="profileImage">프로필 이미지</label>
-                  <input type="file" id="profileImage" name="profileImage" accept="image/*" onChange={handleProfileImageChange} />
+    <div>
+      <M_Header /> {/* 헤더 추가 */}
+      <div className={styles.container}>
+        <div className={styles.sub_container}>
+          <SideBar profile_src={profileImagePreview} username={userInfo.name} useremail={userInfo.email} onProfileImageChange={handleProfileImageChange} />
+          <div className={styles.category}>
+            <section className={styles.profile}>
+              {isProfileEdit ? (
+                <form onSubmit={(e) => { e.preventDefault(); setIsProfileEdit(false); }}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="profileImage">프로필 이미지</label>
+                    <input type="file" id="profileImage" name="profileImage" accept="image/*" onChange={handleProfileImageChange} />
+                  </div>
+                  <button type="submit">수정 완료</button>
+                </form>
+              ) : (
+                <div className={styles.profileInfo}>
+                  <img src={userInfo.profileImage} alt="프로필 이미지" className={styles.profileImage} />
+                  <div>
+                    <h2>{userInfo.approver || '이름 없음'}</h2>  
+                    <p>직책: {userInfo.rank || ''}</p>  
+                    <p>사번: {userInfo.employeeId || ''}</p>  
+                    <p>입사일: {userInfo.joinDate || ''}</p> 
+                    <p>이메일: {userInfo.email || ''}</p>  
+                  </div>
                 </div>
-                <button type="submit">수정 완료</button>
-              </form>
-            ) : (
-              <div className={styles.profileInfo}>
-                <img src={userInfo.profileImage} alt="프로필 이미지" className={styles.profileImage} />
-                <div>
-                  <h2>{userInfo.name || '이름 없음'}</h2>  
-                  <p>직책: {userInfo.rank || ''}</p>  
-                  <p>사번: {userInfo.employeeId || ''}</p>  
-                  <p>입사일: {userInfo.joinDate || ''}</p> 
-                  <p>이메일: {userInfo.email || ''}</p>  
-                </div>
-              </div>
-            )}
-          </section>
-        </div>
-        <div className={styles.content}>
-          <section className={styles.details}>
-            <h2>개인 정보 수정</h2>
-            <form onSubmit={handleSubmit}>
-              <div className={styles.formGroup}>
-                <label htmlFor="phone">전화번호</label>
-                <input type="tel" id="phone" name="phone" value={userInfo.phone || ''} onChange={handleInputChange} />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="email">이메일</label>
-                <input type="email" id="email" name="email" value={userInfo.email || ''} onChange={handleInputChange} readOnly />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="address">주소</label>
-                <input type="text" id="address" name="address" value={userInfo.address || ''} onClick={() => setIsAddressOpen(true)} readOnly />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="zipCode">우편 번호</label>
-                <input type="text" id="zipCode" name="zipCode" value={userInfo.zipCode || ''} onChange={handleInputChange} />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="detailedAddress">상세 주소</label>
-                <input type="text" id="detailedAddress" name="detailedAddress" value={userInfo.detailedAddress || ''} onChange={handleInputChange} />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="reason">변경 사유</label>
-                <input type="text" id="reason" name="reason" value={userInfo.reason || ''} onChange={handleInputChange} />
-              </div>
+              )}
+            </section>
+          
 
-              <h3>수정 대기 정보</h3>
-              <div className={styles.formGroup}>
-                <label htmlFor="approver">신청자</label>
-                <input type="text" id="approver" name="approver" value={userInfo.approver || ''} readOnly />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="applicationDate">신청일</label>
-                <input type="text" id="applicationDate" name="applicationDate" value={userInfo.applicationDate || ''} readOnly />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="applicationStatus">처리 결과</label>
-                <input type="text" id="applicationStatus" name="applicationStatus" value={userInfo.applicationStatus || ''} readOnly />
-              </div>
-              <button type="submit"className={styles['mypage-button']} disabled={userInfo.applicationStatus === '대기 중'}> 수정 신청 </button>
-            </form>
-            {isAdmin && (
-              <div className={styles.adminActions}>
-                <button onClick={() => setIsApprovalListOpen(true)}>승인 리스트</button>
-              </div>
-            )}
-          </section>
+          </div>
+          <div className={styles.content}>
+            <section className={styles.details}>
+              <h2>개인 정보 수정</h2>
+              <form onSubmit={handleSubmit}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="phone">전화번호 -를 넣어서 작성해주세요</label>
+                  <input type="tel" id="phone" name="phone" value={userInfo.phone || ''} onChange={handleInputChange} />
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="email">이메일</label>
+                  <input type="email" id="email" name="email" value={userInfo.email || ''} onChange={handleInputChange} readOnly />
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="address">주소</label>
+                  <input type="text" id="address" name="address" value={userInfo.address || ''} onClick={() => setIsAddressOpen(true)} readOnly />
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="zipCode">우편 번호</label>
+                  <input type="text" id="zipCode" name="zipCode" value={userInfo.zipCode || ''} onChange={handleInputChange} />
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="detailedAddress">상세 주소</label>
+                  <input type="text" id="detailedAddress" name="detailedAddress" value={userInfo.detailedAddress || ''} onChange={handleInputChange} />
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="reason">변경 사유</label>
+                  <input type="text" id="reason" name="reason" value={userInfo.reason || ''} onChange={handleInputChange} />
+                </div>
+
+                <h3>수정 대기 정보</h3>
+                <div className={styles.formGroup}>
+                  <label htmlFor="approver">신청자</label>
+                  <input type="text" id="approver" name="approver" value={userInfo.approver || ''} readOnly />
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="applicationDate">신청일</label>
+                  <input type="text" id="applicationDate" name="applicationDate" value={userInfo.applicationDate || ''} readOnly />
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="applicationStatus">처리 결과</label>
+                  <input type="text" id="applicationStatus" name="applicationStatus" value={userInfo.applicationStatus || ''} readOnly />
+                </div>
+                <button type="submit"className={styles['mypage-button']} disabled={userInfo.applicationStatus === '대기 중'}> 수정 신청 </button>
+              </form>
+              {isAdmin && (
+                <div className={styles.adminActions}>
+                  <button onClick={() => setIsApprovalListOpen(true)}>승인 리스트</button>
+                </div>
+              )}
+            </section>
+          </div>
         </div>
+        {isAddressOpen && (
+          <AddressModal
+            onClose={() => setIsAddressOpen(false)}
+            onComplete={handleAddressComplete}
+          />  
+        )}
+        {isApprovalListOpen && isAdmin && (
+          <ApprovalListModal
+            onClose={() => setIsApprovalListOpen(false)}
+            approvalList={approvalList}
+            handleApprove={handleApprove}
+            handleReject={handleReject}
+          />
+        )}
       </div>
-      {isAddressOpen && (
-        <AddressModal
-          onClose={() => setIsAddressOpen(false)}
-          onComplete={handleAddressComplete}
-        />  
-      )}
-      {isApprovalListOpen && isAdmin && (
-        <ApprovalListModal
-          onClose={() => setIsApprovalListOpen(false)}
-          approvalList={approvalList}
-          handleApprove={handleApprove}
-          handleReject={handleReject}
-        />
-      )}
     </div>
   );
 };

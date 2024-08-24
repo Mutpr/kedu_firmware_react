@@ -13,11 +13,13 @@ import Admin from './components/LoginIk/Admin/Admin';
 import DeleteUser from './components/LoginIk/Admin/DeleteUser'; 
 import axios from 'axios';
 import Mypage from './components/Mypage/Mypage';
-
 import Approval from './components/Apporoval/ApprovalMain';
 import FileDrive from './components/FileDrive/FileDriveMain';
+import Calendar from './components/Calendar/Calendar';
+import Attendance from './components/Attendance/Attendance';
 
 axios.defaults.withCredentials = true
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -25,6 +27,7 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} /> {/* Main homepage route */}
+        <Route path="/Attendance/*" element={<Attendance/>} />
         <Route path="/Board/*" element={<BoardIndex />} />
         <Route path="/mailbox/*" element={<Mailbox />} />
         <Route path="/messenger" element={<Messenger />} />
@@ -34,6 +37,7 @@ root.render(
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/approval" element={<Approval/>} />
         <Route path="/file" element={<FileDrive/>}/>
+        <Route path="/calendar" element={<Calendar />} />
       </Routes>
     </BrowserRouter>
 )
