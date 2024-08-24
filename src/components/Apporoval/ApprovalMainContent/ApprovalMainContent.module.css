@@ -1,12 +1,26 @@
 .grid_container {
   font-family: 'Pretendard-Regular';
     display: grid;
-    grid-template-rows: 0.2fr 1fr;
+    grid-template-rows: 0.2fr 0.1fr 0.1fr;
     grid-gap: 10px;
     width: 100%;
     padding: 20px;
     height: 90%;
     overflow-x: scroll;
+  }
+  .circle{
+  display: flex;
+  width : 60px;
+  height : 60px;
+  border-radius: 30%;
+  background-color: #A9D0F5;
+  align-items: center;
+  justify-content: center;
+  font-size:35px;
+  flex-direction: column;
+  }
+  .circle > h6{
+    font-size:0.8rem;
   }
 
   @font-face {

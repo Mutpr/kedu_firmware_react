@@ -1,7 +1,6 @@
 import Header from "../Header/Header";
 import SideBar from "../Sidebar/Sidebar";
 import ApprovalMainContents from "./ApprovalMainContent/ApprovalMainContents";
-
 const Approval = () => {
     return (
       <div className="app">
