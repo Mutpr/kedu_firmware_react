@@ -151,8 +151,7 @@ const FileUploadModal = () => {
                     <Modal.Title>권한 설정</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {/* 두 번째 모달의 내용 */}
-                    <p>여기에서 권한 설정을 할 수 있습니다.</p>
+                    
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseAuthModal}>

@@ -1,0 +1,22 @@
+/* 휴가 현황 항목 스타일 */
+.vacation_item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .vacation_item:last-child {
+    border-bottom: none;
+  }
+  
+  .vacation_label {
+    flex-basis: 50%;
+    font-weight: bold;
+  }
+  
+  .vacation_days {
+    flex-basis: 50%;
+    text-align: right;
+    color: #888;
+  }

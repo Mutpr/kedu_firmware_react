@@ -21,7 +21,7 @@ export default function Edit({category}) {
             const instance = new Editor({
                 el: editorRef.current,
                 height: '400px',
-                initialEditType: 'markdown',
+                initialEditType: 'WYSIWYG',
                 previewStyle: 'vertical',
             });
 

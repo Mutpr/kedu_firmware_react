@@ -88,6 +88,7 @@ const Login = ({ setIsMypage }) => {
         setLoginID(users_code);
         const isAdmin = users_is_admin === 1;
         setIsAdmin(isAdmin);
+        sessionStorage.setItem('isAdmin', isAdmin);
 
         // 프로필 정보 가져오기 및 세션에 저장
         fetchUserProfile(users_code, users_seq);
@@ -113,11 +114,12 @@ const Login = ({ setIsMypage }) => {
       });
   };
   
-
+  // 로그아웃 핸들러
   const handleLogout = () => {
     axios.post(`${serverUrl}/auth/logout`)
       .then(() => {
         console.log('로그아웃 성공');
+        // 세션 및 상태 초기화
         sessionStorage.removeItem('loginID');
         sessionStorage.removeItem('usersName');
         sessionStorage.removeItem('usersSeq');
@@ -126,6 +128,7 @@ const Login = ({ setIsMypage }) => {
         sessionStorage.removeItem('joinDate'); 
         sessionStorage.removeItem('isAdmin');
         sessionStorage.removeItem('approvedUserInfo');
+        sessionStorage.removeItem('previousUserInfo');
 
         setLoginID('');
         setAuth({ users_code: '', users_password: '' });

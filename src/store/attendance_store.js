@@ -26,14 +26,17 @@ export const useAttendanceStore = create((set, get) => ({
     dates: [],
     setDates: (dates) => set({ dates }),
 
+     // 부서원 데이터 초기화 (상태 초기화)
+    clearDepartmentMembers: () => set({ departmentMembers: [] }),
+
      // 부서 일정 가져오기 - usersSeq와 날짜를 기반으로
      fetchDepartmentEvents: async (usersSeq, date) => {
         try {
             const response = await axios.get(`${serverUrl}/attendance/departmentEvents`, {
                 params: { users_seq: usersSeq, date: date }
             });
-            console.log(date);
-            console.log('Department events response:', response.data);  // 응답 데이터 구조 확인
+            // console.log(date);
+            // console.log('Department events response:', response.data);  // 응답 데이터 구조 확인
     
             if (response.data && Array.isArray(response.data)) {
                 const events = response.data.map(event => {
@@ -62,7 +65,7 @@ export const useAttendanceStore = create((set, get) => ({
     
                 set({ departmentEvents: events });
             } else {
-                console.error('Department events 데이터가 배열이 아닙니다:', response.data);
+                // console.error('Department events 데이터가 배열이 아닙니다:', response.data);
                 set({ departmentEvents: [] });
             }
         } catch (error) {
@@ -81,9 +84,9 @@ export const useAttendanceStore = create((set, get) => ({
                 const response = await axios.get(`${serverUrl}/users/${loginID}/deptprofile`);
                 if (Array.isArray(response.data)) {
                     set({ departmentMembers: response.data });
-                    console.log(response.data);
+                    // console.log(response.data);
                 } else {
-                    console.error("departmentMembers 데이터가 배열이 아닙니다:", response.data);
+                    // console.error("departmentMembers 데이터가 배열이 아닙니다:", response.data);
                     set({ departmentMembers: [] });  // 배열이 아닌 경우 빈 배열로 설정
                 }
             } catch (error) {

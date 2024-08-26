@@ -18,7 +18,6 @@ export const useCalendarStore = create((set) => ({
     setEvents: (events) => set({ events }),
     calendars: [],
     setCalendars: (calendars) => set({ calendars }),
-    // 상태 변경 감지 후 UI 업데이트를 위한 추가 상태
     isCalendarUpdated: false,
     setIsCalendarUpdated: (updated) => set({ isCalendarUpdated: updated }),
-  }));
+}));

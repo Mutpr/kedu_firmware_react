@@ -4,19 +4,23 @@ import axios from 'axios';
 import { useAuthStore } from '../../../store/store';
 import styles from './List.module.css';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookmark, faBookmark as faBookmarkRegular } from '@fortawesome/free-regular-svg-icons';
+import { faBookmark as faBookmarkSolid } from '@fortawesome/free-solid-svg-icons';
 
 axios.defaults.withCredentials = true;
 
 export const List = ({ category = {} }) => {
     const { usersName } = useAuthStore();
     const [data, setData] = useState([]);
+    const [bookmarkedPosts, setBookmarkedPosts] = useState(new Set());
     const [currentCategory, setCurrentCategory] = useState({ category_seq: 0, category_name: '공지사항' });
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [sortOrder, setSortOrder] = useState('latest');
     const [selectedItems, setSelectedItems] = useState([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState(''); // 검색어 상태 추가
+    const [searchQuery, setSearchQuery] = useState('');
     const itemsPerPage = 10;
     const serverUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -30,14 +34,24 @@ export const List = ({ category = {} }) => {
                 setSelectedItems([]);
                 setCurrentPage(1);
             })
-            .catch(error => {
+            .catch(error => {http://192.168.1.10:3000/
                 console.error('Error fetching data:', error);
             });
-    }, [serverUrl, category, currentCategory]);
+
+        // Fetch bookmarked posts for the current user
+        axios.get(`${serverUrl}:3000/bookmark`)
+            .then(response => {
+                const bookmarked = new Set(response.data.map(post => post.board_seq));
+                setBookmarkedPosts(bookmarked);
+            })
+            .catch(error => {
+                console.error('Error fetching bookmarked posts:', error);
+            });
+    }, [serverUrl, category, currentCategory, setBookmarkedPosts]);
 
     const filteredData = () => {
         const filtered = data.filter(item =>
-            item.board_title.toLowerCase().includes(searchQuery.toLowerCase()) // 검색어 필터링
+            item.board_title.toLowerCase().includes(searchQuery.toLowerCase())
         );
         return filtered.sort((a, b) => {
             const dateA = new Date(a.board_write_date);
@@ -78,7 +92,7 @@ export const List = ({ category = {} }) => {
     const handleToggleSort = (order) => {
         setSortOrder(order);
         setCurrentPage(1);
-        setIsDropdownOpen(false); // 드롭다운 닫기
+        setIsDropdownOpen(false);
     };
 
     const handleCheckboxChange = (seq) => {
@@ -100,14 +114,38 @@ export const List = ({ category = {} }) => {
                     });
             });
         }
-        setIsDropdownOpen(false); // 드롭다운 닫기
+        setIsDropdownOpen(false);
     };
 
     const handleCategoryClick = () => {
         setCurrentCategory({ category_seq: 0, category_name: '공지사항' });
     };
 
-    return (
+    const handleBookmarkToggle = (seq) => {
+        if (bookmarkedPosts.has(seq)) {
+            axios.delete(`${serverUrl}:3000/bookmark/${seq}`)
+                .then(() => {
+                    setBookmarkedPosts(prev => {
+                        const updated = new Set(prev);
+                        updated.delete(seq);
+                        return updated;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error removing bookmark:', error);
+                });
+        } else {
+            axios.post(`${serverUrl}:3000/bookmark/${seq}`)
+                .then(() => {
+                    setBookmarkedPosts(prev => new Set(prev).add(seq));
+                })
+                .catch(error => {
+                    console.error('Error adding bookmark:', error);
+                });
+        }
+    };
+
+    return (    
         <>
             <div className={styles.categoryHeader}>
                 <div className={styles.headerLeft}>
@@ -121,9 +159,8 @@ export const List = ({ category = {} }) => {
                             type="text"
                             placeholder="게시글 제목 검색"
                             value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)} // 검색어 변경 시 상태 업데이트
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
-                        {/* <button onClick={() => setSearchQuery('')}>초기화</button>  */}
                     </div>
                     <div className={styles.dropdownContainer}>
                         <button
@@ -166,6 +203,7 @@ export const List = ({ category = {} }) => {
                             <th>글쓴이</th>
                             <th>작성일자</th>
                             <th>조회수</th>
+                            <th>북마크</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -187,6 +225,16 @@ export const List = ({ category = {} }) => {
                                 <td>{e.users_name || '작성자 정보 없음'}</td>
                                 <td>{new Date(e.board_write_date).toLocaleString()}</td>
                                 <td>{e.board_view_count}</td>
+                                <td>
+                                    <FontAwesomeIcon
+                                        icon={bookmarkedPosts.has(e.board_seq) ? faBookmarkSolid : faBookmarkRegular}
+                                        onClick={(evt) => {
+                                            evt.stopPropagation();
+                                            handleBookmarkToggle(e.board_seq);
+                                        }}
+                                        className={styles.bookmarkIcon}
+                                    />
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -220,3 +268,4 @@ export const List = ({ category = {} }) => {
 };
 
 export default List;
+

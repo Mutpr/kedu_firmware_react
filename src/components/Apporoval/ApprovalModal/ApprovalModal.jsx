@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -367,11 +367,8 @@ function ApprovalModal() {
                             <Dropdown.Item onClick={() => handleCategorySelect('[001][서류 결재]')}>[001][서류 결재]</Dropdown.Item>
                             <Dropdown.Item onClick={() => handleCategorySelect('[002][보고서 결재]')}>[002][보고서 결재]</Dropdown.Item>
                             <Dropdown.Item onClick={() => handleCategorySelect('[003][문서 결재]')}>[003][문서 결재]</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleCategorySelect('[004][예산 결재]')}>[004][예산 결재]</Dropdown.Item>
                             <Dropdown.Divider />
-                            <Dropdown.Item onClick={() => handleCategorySelect('[004][예산 책정]')}>[004][예산 책정]</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleCategorySelect('[005][예산 결재]')}>[005][예산 결재]</Dropdown.Item>
-                            <Dropdown.Divider />
-                            <Dropdown.Item onClick={() => handleCategorySelect('[006][휴가 신청]')}>[006][휴가 신청]</Dropdown.Item>
                         </DropdownButton>
                         <Form.Control name="approval_title" aria-label="Text input with dropdown button" onChange={handleApprovalTitleChange} value={approvalData.approval_title} />
                     </InputGroup>
@@ -417,7 +414,8 @@ function ApprovalModal() {
                             <Dropdown.Item
                                 key={index}
                                 onClick={()=>handleTemplateClick(item)}
-                                value={item}
+                                value={item} 
+                                className="styles.listItem d-flex"
                             >
                                 {item}
                             </Dropdown.Item>
@@ -452,7 +450,7 @@ function ApprovalModal() {
                             {filteredListA.map((item, index) => (
                                 <ListGroup.Item
                                     key={index}
-                                    className={styles.listItem}
+                                    className="d-flex styles.listItem"
                                     onClick={() => handleItemClick(item)}
                                     style={{
                                         cursor: 'pointer',
@@ -468,7 +466,7 @@ function ApprovalModal() {
                         <ListGroup>
                             {listB.map((item, index) => (
                                 <ListGroup.Item
-                                    className={styles.listItem}
+                                    className="d-flex styles.listItem"
                                     key={index}
                                     onClick={() => handleItemRemove(index)}
                                     style={{ cursor: 'pointer' }}

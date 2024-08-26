@@ -1,0 +1,123 @@
+/* 여기에 나머지 CSS는 동일합니다. */
+
+.calendar {
+  background-color: #fafafa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  min-height: 300px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.header h2 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+.actions span {
+  font-size: 0.9rem;
+  margin-right: 10px;
+  color: #888;
+}
+
+.navButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #888;
+  margin-left: 5px;
+}
+
+.navButton:disabled {
+  color: #ddd;
+  cursor: not-allowed;
+}
+
+.eventsList {
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: 400px; /* 리스트의 최대 높이를 설정하여 스크롤 가능하도록 만듭니다 */
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.calendar_item {
+  display: flex;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.9rem;
+  align-items: center;
+}
+
+.calendar_item:last-child {
+  border-bottom: none;
+}
+
+.date {
+  flex-basis: 20%;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.event {
+  flex-basis: 30%;
+}
+
+.location {
+  flex-basis: 20%;
+  text-align: right;
+  color: #888;
+}
+
+.time {
+  flex-basis: 30%;
+  text-align: right;
+  color: #888;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .calendar_item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .date,
+  .event,
+  .location,
+  .time {
+    flex-basis: 100%;
+    text-align: left;
+  }
+
+  .time,
+  .location {
+    margin-top: 5px;
+    text-align: right;
+  }
+}

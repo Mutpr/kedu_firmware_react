@@ -1,12 +1,29 @@
+.card_container {
+  position: relative;  /* 부모 컨테이너에 상대적 위치 설정 */
+}
 .grid_container {
   font-family: 'Pretendard-Regular';
     display: grid;
-    grid-template-rows: 0.2fr 1fr;
+    grid-template-rows: 0.2fr 0.1fr 0.1fr;
     grid-gap: 10px;
     width: 100%;
     padding: 20px;
     height: 90%;
     overflow-x: scroll;
+  }
+  .circle{
+  display: flex;
+  width : 60px;
+  height : 60px;
+  border-radius: 30%;
+  background-color: #A9D0F5;
+  align-items: center;
+  justify-content: center;
+  font-size:35px;
+  flex-direction: column;
+  }
+  .circle > h6{
+    font-size:0.8rem;
   }
 
   @font-face {
@@ -15,3 +32,45 @@
     font-weight: 400;
     font-style: normal;
 }
+
+
+.card {
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  padding: 16px;
+  height:100px;
+  display: flex;
+  justify-content: center;
+}
+
+.icon {
+  font-size: 32px;
+  color: #4A90E2;
+  margin-bottom: 2px;
+  margin-top: 5px;
+}
+
+.title {
+  font-size: 45px;
+  font-weight: bold;
+  margin-bottom:4px !important;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #888888;
+}
+
+.additionalInfo {
+  font-size: 0.8rem;
+  color: #AAAAAA;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+}
+p{
+  margin-bottom: 3px !important;
+}
+

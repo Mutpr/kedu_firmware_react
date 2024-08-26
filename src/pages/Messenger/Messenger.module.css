@@ -1,197 +1,213 @@
 .messengerContainer {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-  
-  .mainContent {
-    display: flex;
-    flex: 1;
-  }
-  
-  .messengerBody {
-    display: flex;
-    flex: 1;
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: #f5f7fa;
-    height: calc(100vh - 100px); /* Header 높이 제외한 고정 크기 */
-  }
-  
-  /* 사이드바 */
-  .messengerSidebar {
-    width: 250px;
-    margin-right: 20px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    overflow: hidden;
-    background-color: #ffffff;
-  }
-  
-  .sidebarHeader {
-    background-color: #007bff;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    font-weight: bold;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .messengerSidebar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    height: calc(100vh - 120px); /* 전체 높이에서 Header와 padding 크기를 뺀 고정 높이 */
-    overflow-y: auto;
-  }
-  
-  .messengerSidebar li {
-    position: relative;
-    padding: 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #f0f0f0;
-    transition: background-color 0.2s;
-  }
-  
-  .unreadBadge {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: #ff0000;
-    color: #ffffff;
-    border-radius: 50%;
-    padding: 3px 8px;
-    font-size: 0.8em;
-  }
-  
-  .messengerSidebar li:hover {
-    background-color: #f7f7f7;
-  }
-  
-  .messengerMain {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    background-color: #ffffff;
-  }
-  
-  .chatHeader {
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
-    text-align: center;
-    font-weight: bold;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  /* 채팅 목록 영역 */
-  .messengerChat {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto; /* 스크롤 활성화 */
-    background-color: #f7f9fc;
-    max-height: 700px; /* 채팅 창의 고정 높이 */
-  }
-  
-  .messageContainer {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
-  }
-  
-  .messageSentWrapper {
-    display: flex;
-    justify-content: flex-end;
-  }
-  
-  .messageSent {
-    background-color: #f1c40f;
-    padding: 10px;
-    border-radius: 10px;
-    max-width: 60%;
-  }
-  
-  .messageTimeLeft {
-    font-size: 0.75em;
-    color: #888;
-    text-align: right;
-  }
-  
-  .messageReceivedWrapper {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .messageReceived {
-    background-color: white;
-    padding: 10px;
-    border-radius: 10px;
-    max-width: 60%;
-  }
-  
-  .messageTimeRight {
-    font-size: 0.75em;
-    color: #888;
-    text-align: left;
-  }
-  
-  .senderName {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .messageBox {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-top: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 
-  }
-  
-  .messageBox input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 10px;
-  }
-  
-  .emojiButton {
-    background: transparent;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-  }
-  
-  .emojiPicker {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    z-index: 100;
-    margin-top: 5px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
+.mainContent {
+  display: flex;
+  flex: 1;
+}
 
-  .emojiPickerPopup {
-    position: absolute;
-    top: 350px; /* 상단에 고정 */
-    left: 100px; /* 왼쪽 기준 위치 설정 */
-    z-index: 1000; /* 다른 요소 위로 출력되도록 설정 */
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    background-color: white;
-    padding: 10px;
-  }
+.messengerBody {
+  display: flex;
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f5f7fa;
+  height: calc(100vh - 100px); /* Header 높이 제외한 고정 크기 */
+}
 
-  .editableDiv:empty:before {
-    content: attr(placeholder);
-    color: #aaa;
-  }
-  
+/* 사이드바 */
+.messengerSidebar {
+  width: 250px;
+  margin-right: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.sidebarHeader {
+  background-color: #007bff;
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+}
+
+.messengerSidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  height: calc(100vh - 120px); /* 전체 높이에서 Header와 padding 크기를 뺀 고정 높이 */
+  overflow-y: auto;
+}
+
+.messengerSidebar li {
+  position: relative;
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s;
+}
+
+.unreadBadge {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #ff0000;
+  color: #ffffff;
+  border-radius: 50%;
+  padding: 3px 8px;
+  font-size: 0.8em;
+}
+
+.messengerSidebar li:hover {
+  background-color: #f7f7f7;
+}
+
+.messengerMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #ffffff;
+}
+
+.chatHeader {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+}
+
+/* 채팅 목록 영역 */
+.messengerChat {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto; /* 스크롤 활성화 */
+  background-color: #f7f9fc;
+  max-height: 700px; /* 채팅 창의 고정 높이 */
+}
+
+.messageContainer {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.messageSentWrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.messageSent {
+  background-color: #f1c40f;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 60%;
+}
+
+.messageTimeLeft {
+  font-size: 0.75em;
+  color: #888;
+  text-align: right;
+}
+
+.messageReceivedWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.messageReceived {
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 60%;
+  word-wrap: break-word;  /* 단어가 길어질 경우 줄바꿈 처리 */
+  word-break: break-word;  /* 길이가 긴 단어도 박스 안에 맞게 줄바꿈 */
+  white-space: pre-wrap;   /* 연속된 공백도 유지하며 줄바꿈 */
+  overflow-wrap: break-word;  /* 텍스트가 박스 밖으로 넘치지 않게 함 */
+}
+
+.messageTimeRight {
+  font-size: 0.75em;
+  color: #888;
+  text-align: left;
+}
+
+.senderName {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.messageBox {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #f7f9fc;
+}
+
+.messageBox input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.emojiButton {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.emojiPicker {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  margin-top: 5px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.emojiPickerPopup {
+  position: absolute;
+  top: 400px; /* 상단에 고정 */
+  left: 5px; /* 왼쪽 기준 위치 설정 */
+  z-index: 1000; /* 다른 요소 위로 출력되도록 설정 */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: white;
+  padding: 10px;
+}
+
+.editableDiv:empty:before {
+  content: attr(placeholder);
+  color: #aaa;
+}
+
+.editableDiv {
+  flex: 1;
+  padding: 10px;
+  min-height: 50px; /* 기본 높이를 설정하여 입력 상자가 작아 보이지 않도록 설정 */
+  max-height: 100px; /* 최대 높이 설정, 이 높이 이상으로 늘어나면 스크롤 */
+  overflow-y: auto; /* 내용이 많아지면 스크롤 활성화 */
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  font-size: 1rem;
+  line-height: 1.5;
+  height: 100px;
+}

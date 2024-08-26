@@ -1,25 +1,11 @@
-/* 기본 스타일 */
-/* 해당 부분 CSS 이슈 */
-:root {
-    --primary-color: #007bff;
-    --secondary-color: #dc3545;
-    --text-color: #333;
-    --background-color: #fff;
-    --hover-background-color: #f1f1f1;
-    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    --border-radius: 5px;
-    --font-size: 0.9rem;
-    --padding: 8px 12px;
-}
-
 /* 전체 레이아웃 스타일 */
 .container {
     width: calc(100% - 40px);
     padding: 20px;
-    border-radius: var(--border-radius);
-    background-color: var(--background-color);
+    border-radius: 5px;
+    background-color: #fff;
     position: relative;
-    box-shadow: var(--box-shadow);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding-bottom: 60px; /* 페이지네이션을 위한 여백 추가 */
 }
 
@@ -40,7 +26,7 @@
 
 .headerLeft h2 {
     font-size: 1.5rem;
-    color: var(--text-color);
+    color: #333;
     margin-right: 10px;
     cursor: pointer;
 }
@@ -53,33 +39,33 @@
 
 #write {
     display: inline-block;
-    color: var(--text-color); 
+    color: #333; 
     text-decoration: none;
-    border-radius: var(--border-radius);
+    border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
     cursor: pointer;
 }
 
 #write:hover {
-    background-color: var(--primary-color);
-    color: var(--background-color);
+    background-color: #007bff;
+    color: #fff;
 }
 
 /* 버튼 스타일 */
 button {
-    padding: var(--padding);
-    border: 1px solid var(--primary-color);
-    border-radius: var(--border-radius);
-    background-color: var(--background-color);
-    color: var(--primary-color);
-    font-size: var(--font-size);
+    padding: 8px 12px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #007bff;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
 }
 
 button:hover {
-    background-color: var(--primary-color);
-    color: var(--background-color);
+    background-color: #007bff;
+    color: #fff;
 }
 
 button:disabled {
@@ -90,9 +76,9 @@ button:disabled {
 
 /* 활성화된 버튼 스타일 */
 button.active {
-    background-color: var(--primary-color);
-    color: var(--background-color);
-    border-color: var(--primary-color);
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
 }
 
 /* 내용 스타일 */
@@ -115,7 +101,7 @@ button.active {
 
 .content th {
     background-color: #f9f9f9;
-    color: var(--text-color);
+    color: #333;
     font-weight: 600;
 }
 
@@ -124,11 +110,11 @@ button.active {
 }
 
 .content tr:nth-child(odd) {
-    background-color: var(--background-color);
+    background-color: #fff;
 }
 
 .content tr:hover {
-    background-color: var(--hover-background-color);
+    background-color: #f1f1f1;
     cursor: pointer;
 }
 
@@ -151,20 +137,20 @@ button.active {
 
 /* 삭제 버튼 스타일 */
 .deleteButton {
-    padding: var(--padding);
-    border: 1px solid var(--secondary-color);
-    border-radius: var(--border-radius);
-    background-color: var(--background-color);
-    color: var(--secondary-color);
-    font-size: var(--font-size);
+    padding: 8px 12px;
+    border: 1px solid #dc3545;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #dc3545;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     margin-left: 10px;
 }
 
 .deleteButton:hover {
-    background-color: var(--secondary-color);
-    color: var(--background-color);
+    background-color: #dc3545;
+    color: #fff;
 }
 
 /* 페이지네이션 스타일 */
@@ -174,32 +160,32 @@ button.active {
     display: flex;
     justify-content: center;
     margin-top: 20px;
-    padding: var(--padding);
+    padding: 8px 12px;
     box-sizing: border-box;
 }
 
 .pagination a, .pagination button {
     display: inline-block;
-    padding: var(--padding);
+    padding: 8px 12px;
     margin: 0 4px;
-    font-size: var(--font-size);
-    color: var(--text-color);
+    font-size: 0.9rem;
+    color: #333;
     text-decoration: none;
-    border: 1px solid var(--primary-color);
-    border-radius: var(--border-radius);
+    border: 1px solid #007bff;
+    border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
     text-align: center;
 }
 
 .pagination a:hover, .pagination button:hover {
-    background-color: var(--hover-background-color);
-    color: var(--primary-color);
+    background-color: #f1f1f1;
+    color: #007bff;
 }
 
 .pagination .active {
-    background-color: var(--primary-color);
+    background-color: #007bff;
     color: #fff;
-    border-color: var(--primary-color);
+    border-color: #007bff;
 }
 
 .pagination .disabled {
@@ -210,7 +196,7 @@ button.active {
 
 .pagination .ellipsis {
     pointer-events: none;
-    color: var(--text-color);
+    color: #333;
 }
 
 /* 드롭다운 컨테이너 */
@@ -220,55 +206,55 @@ button.active {
 }
 
 .dropdownToggle {
-    padding: var(--padding);
-    border: 1px solid var(--primary-color);
-    border-radius: var(--border-radius);
-    background-color: var(--background-color);
-    color: var(--primary-color);
-    font-size: var(--font-size);
+    padding: 8px 12px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #007bff;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
 }
 
 .dropdownToggle:hover {
-    background-color: var(--primary-color);
-    color: var(--background-color);
+    background-color: #007bff;
+    color: #fff;
 }
 
 .dropdownMenu {
     position: absolute;
     right: 0;
     top: 100%;
-    background-color: var(--background-color);
-    box-shadow: var(--box-shadow);
-    border-radius: var(--border-radius);
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
     padding: 10px 0;
     margin-top: 5px;
     z-index: 1000;
 }
 
 .dropdownMenu li {
-    padding: var(--padding);
+    padding: 8px 12px;
     white-space: nowrap;
     cursor: pointer;
     list-style: none;
 }
 
 .dropdownMenu li:hover {
-    background-color: var(--hover-background-color);
+    background-color: #f1f1f1;
 }
 
 .dropdownMenu li a {
-    color: var(--primary-color);
+    color: #007bff;
     text-decoration: none;
 }
 
 .dropdownMenu li button {
     border: none;
     background: none;
-    color: var(--secondary-color);
+    color: #dc3545;
     cursor: pointer;
-    font-size: var(--font-size);
+    font-size: 0.9rem;
 }
 
 .dropdownMenu li button:disabled {

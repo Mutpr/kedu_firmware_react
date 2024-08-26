@@ -1,9 +1,14 @@
 /* CSS 스타일 */
+.CardDiv{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    width: 100%;
+    border: none;
+}
 .CardMain {
     overflow: hidden; /* 넘치는 내용을 숨기기 */
     display: flex;
-    justify-content: center; /* 가운데 정렬 */
-    align-items: center;
+    width: 100%;
 }
 
 .Card {
@@ -18,6 +23,9 @@
     max-width: 100%;
 }
 
+.CardHeader{
+    background-color: cyan;
+}
 .CardTitle {
     margin-bottom: 0.5rem;
 }
