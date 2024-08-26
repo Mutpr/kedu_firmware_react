@@ -1,3 +1,6 @@
+.card_container {
+  position: relative;  /* 부모 컨테이너에 상대적 위치 설정 */
+}
 .grid_container {
   font-family: 'Pretendard-Regular';
     display: grid;
@@ -29,3 +32,45 @@
     font-weight: 400;
     font-style: normal;
 }
+
+
+.card {
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  padding: 16px;
+  height:100px;
+  display: flex;
+  justify-content: center;
+}
+
+.icon {
+  font-size: 32px;
+  color: #4A90E2;
+  margin-bottom: 2px;
+  margin-top: 5px;
+}
+
+.title {
+  font-size: 45px;
+  font-weight: bold;
+  margin-bottom:4px !important;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #888888;
+}
+
+.additionalInfo {
+  font-size: 0.8rem;
+  color: #AAAAAA;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+}
+p{
+  margin-bottom: 3px !important;
+}
+

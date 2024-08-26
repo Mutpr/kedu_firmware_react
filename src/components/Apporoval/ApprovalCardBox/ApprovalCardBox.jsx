@@ -1,63 +1,36 @@
 import { Card } from 'react-bootstrap';
-import style from './ApporvalCardBox.module.css'
+import styles from './ApporvalCardBox.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFile } from '@fortawesome/free-regular-svg-icons';
 
 const ApprovalCard = () => {
     return (
-        <div className={style.CardDiv}>
-            <Card style={{ display: 'flex', flexDirection: 'row' }}>
-                <div className={style.CardMain}>
-                    <Card style={{ width: '287px', height: '90px' }}>
-                        
-                        <Card.Body>
-                            <Card.Text>
-                                <h6>남은 휴가</h6>
-                                <h3>5</h3>
-                            </Card.Text>
-                        </Card.Body>
-                        
-                    </Card>
-                </div>
-                <div className={style.CardMain}>
-                    <Card style={{ width: '287px', height: '90px' }}>
-                        <Card.Body>
-                            <Card.Text>
-                                <h6>총 출석 일수</h6>
-                                <h3>5</h3>
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </div>
-                <div className={style.CardMain}>
-                    <Card style={{ width: '287px', height: '90px', display:"flex"}} className={style.Card}>
-                        <Card.Body>
-                            <div>
-                            <Card.Text>
-                                <div>
-                                <h6>결재 대기 중인 결재</h6>
-                                </div>
-                                <div style={{ display: "flex", alignItems: "center"}}>
-                                    <h3>5</h3>
-                                </div>
-                            </Card.Text>
-                            </div>
-                        </Card.Body>
-                    </Card>
-                    
-                </div>
-
-                <div className={style.CardMain}>
-                    <Card style={{ width: '287px', height: '90px' }}>
-                        <Card.Body>
-                            <Card.Text>
-                                <h6>결재 완료된 결재</h6>
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </div>
+        <Card bsPrefix={styles.CardDiv}>
+            <Card border="secondary" className="m-1 mb-3 mt-3">
+                <Card.Header>결재 대기 문서</Card.Header>
+                <Card.Body>
+                <h4>5</h4>
+                </Card.Body>
             </Card>
-        </div>
+            <Card border="secondary" className="m-1 mb-3 mt-3">
+                <Card.Header>최근 결재 문서</Card.Header>
+                <Card.Body>
+                <h4>5</h4>
+                </Card.Body>
+            </Card>
+            <Card border="secondary" className="m-1 mb-3 mt-3">
+                <Card.Header>마감 임박 결재 문서</Card.Header>
+                <Card.Body>
+                <h4>5</h4>
+                </Card.Body>
+            </Card>
+            <Card border="secondary" className="m-1 mb-3 mt-3" >
+                <Card.Header>결재 시한 마감 문서</Card.Header>
+                <Card.Body>
+                <h4>5</h4>
+                </Card.Body>
+            </Card>
+        </Card>
     );
 }
 
